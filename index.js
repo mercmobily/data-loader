@@ -584,7 +584,7 @@ function lookIntoRecord(record, elementData, loadedElementData, resolvedIdParams
 // in the loaded record:
 //
 //   * idParamsValues that were missing from the URL, or
-//   * `[...store...]Record` entries in the loadedElement structure)
+//   * `[...idParam...]Record` entries in the loadedElement structure)
 //
 // Assume that the data URL is like this: `/users/:userId/usersExtra/:userId/addresses/:addressId`, and the page URL is
 // like this `/addresses/:addressId`, and fetching the address record returns a record that includes `userId`;  
@@ -604,7 +604,7 @@ function lookIntoRecord(record, elementData, loadedElementData, resolvedIdParams
         resolvedIdParamsValues[store] = r[idParam]
       }
 
-// Look for a `[...store...]Record` entry in the loaded record. For example the record for the addresses
+// Look for a `[...idParam...]Record` entry in the loaded record. For example the record for the addresses
 // store might contain the `usersRecord` property, and -- since the URL includes 
 // `/users/:userId/addresses/:addressId` -- it will be assumed to contain a valid record for the `users` store
 // If that is the case, the property's content (supposed to be a full record object) will be assigned to
