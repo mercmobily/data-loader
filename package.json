@@ -1,0 +1,24 @@
+{
+  "name": "data-loader",
+  "version": "1.0.0",
+  "description": "A data loader for SPA (Single Page Applications)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mercmobily/data-loader.git"
+  },
+  "keywords": [
+    "data",
+    "loader",
+    "spa"
+  ],
+  "author": "Tony Mobily",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/mercmobily/data-loader/issues"
+  },
+  "homepage": "https://github.com/mercmobily/data-loader#readme"
+}
