@@ -385,6 +385,7 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 
   const alreadylookedInto = {}
   while (true) { 
+    debugger
     let nullAndUnloadedPresent = false
     const toLoad = []
 
@@ -401,11 +402,12 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 // The `lookIntoRecord` will make sure that any missing idParams in resolvedIdParamsValues are filled in by the record; the
 // `alreadylookedInto` hash makes sure that it only happens once per store.
 
-      const record = elementData[`${store}Record`] || loadedElementData[`${store}Record`]
-      if (typeof record  === 'object' ) { 
-        if (!alreadylookedInto[`${store}Record`]) {
+      const record = elementData[`${idParam}Record`] || loadedElementData[`${idParam}Record`]
+      
+      if (record) { 
+        if (!alreadylookedInto[`${idParam}Record`]) {
           lookIntoRecord(record, elementData, loadedElementData, resolvedIdParamsValues, resolvedListFilter, store2IdParams, isList, store)
-          alreadylookedInto[`${store}Record`] = true
+          alreadylookedInto[`${idParam}Record`] = true
         }
         continue
       }
@@ -453,12 +455,12 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
           if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(url, store, nakedStoreUrl, idParamValue, {}, dataUrlInfo)
 
           // Actually fetch the record
-          let record = await fetchFAKE(url)
-          loadedElementData[`${store}Record`] = record
+          let record = await fetch(url)
+          loadedElementData[`${idParam}Record`] = record
 
-          if (!alreadylookedInto[`${store}Record`]) {
+          if (!alreadylookedInto[`${idParam}Record`]) {
             lookIntoRecord(record, elementData, loadedElementData, resolvedIdParamsValues,  resolvedListFilter, store2IdParams, isList, store)
-            alreadylookedInto[`${store}Record`] = true
+            alreadylookedInto[`${idParam}Record`] = true
           }
           return true
         })()
@@ -510,6 +512,15 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
   }
 
 
+// There is a small, but ugly, possibility that even though all records were there, some Ids are
+// still missing. This must not happen, as the viewing element will be unable to reload
+// if needed. Do a check on that
+  const idParamsMissing = Object.keys(resolvedIdParamsValues).filter(store => resolvedIdParamsValues[store] === null)
+  if (idParamsMissing.length) {
+    throw new Error(`Loading successful, but IDs missing for stores: ${idParamsMissing.join(', ')}`)
+  }
+  
+
   // Now that the loading is done, there is potentially one more thing to do: addresses.
   // For example assume that the page URL is actually `/users/:userId/addresses/:addressId/deliveries`
   //
@@ -530,7 +541,7 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
     if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(url, dataUrlInfo.listStore, nakedStoreUrl, null, searchParams, dataUrlInfo)
 
     /* Actually fetch the list */
-    loadedElementData[`${dataUrlInfo.listStore}List`] = await fetchFAKE(url, true)
+    loadedElementData[`${dataUrlInfo.listStore}List`] = await fetch(url, true)
   }
 
   // The end result of ths function, as explained at the very beginning, is making network requests
@@ -542,7 +553,6 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
     resolvedListFilter: resolvedListFilter || null
   }
 }
-
 
 // Its job is to change loadedElementData, resolvedIdParamsValues, resolvedListFilter depending of the contents of
 // `record`, `elementData` and `loadedElementData`. `store2IdParams`, `isList` and `store` are accessory information
@@ -557,6 +567,8 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 // other records, it will add those to the list of records to check and will continue the cycle.
 //
 function lookIntoRecord(record, elementData, loadedElementData, resolvedIdParamsValues, resolvedListFilter, store2IdParams, isList, store) {
+
+  if (typeof record  !== 'object' ) return 
 
 // The function works by unshifting elements from the `recordToCheck` array, which is primed to only contain
 // the passed `record`.
@@ -601,11 +613,11 @@ function lookIntoRecord(record, elementData, loadedElementData, resolvedIdParams
 // The property's content will _also_ ne added to the list of records to be checked, which will make this very
 // while() cycle go for longer, since the statement `r = recordsToCheck.shift()` will return another record.
 
-      const elementDataRecord = elementData[`${store}Record]`] || loadedElementData[`${store}Record]`]
+      const elementDataRecord = elementData[`${idParam}Record]`] || loadedElementData[`${idParam}Record]`]
 
-      if (!elementDataRecord && typeof r[`${store}Record`]  !== 'undefined') {
-        loadedElementData[`${store}Record`] = r[`${store}Record`]                  
-        recordsToCheck.push(r[`${store}Record`])
+      if (!elementDataRecord && typeof r[`${idParam}Record`]  !== 'undefined') {
+        loadedElementData[`${idParam}Record`] = r[`${idParam}Record`]                  
+        recordsToCheck.push(r[`${idParam}Record`])
       }
 
       // For lists, also try and resolve the list filter in case some
@@ -622,7 +634,7 @@ function lookIntoRecord(record, elementData, loadedElementData, resolvedIdParams
 // END OF function lookIntoRecord(record)
 // **********************************************
 
-
+/*
 async function fetchFAKE(url, isList) {
   console.log('FETCHED: ', url)
   if (isList) {
@@ -652,7 +664,7 @@ async function fetchFAKE(url, isList) {
         break
 
       case 'cazzo':
-        return { cazzo1: 'a', figaId2: 10, figaIdRecord2: 'FIGAIDRECORD' }
+        return { cazzo1: 'a', figaId: 10, figaIdRecord: { cazzoId: 10, name: 'FIGAIDRECORD' }}
         break
     }
     return {
@@ -663,15 +675,21 @@ async function fetchFAKE(url, isList) {
     }
   }
 }
+*/
 
+/*
 async function run() {
 
+
+  // async function loader (dataUrl = '', routingData = {}, isList = false, elementData, config) {
+
   const r = await loader(
-    '/stores/figa/:figaId/cazzo/:cazzoId/people/:personId/addresses/:addressId/berths', 
+    '/stores/figa/:figaId/cazzo/:cazzoId/peopleExtra/:personId/people/:personId/addresses/:addressId/berths', 
     // '/stores/people/:personId/addresses/:addressId', 
-    { figaId: 100, cazzoId2: 10, personId: 10, addressId: 20},
+    // '/stores/people/:stevedorePersonId/addresses/:addressId', 
+    { figaId: 100, cazzoId2: 10, personId2: 10, addressId: 20},
     true,
-    { cazzoRecord: { a: 10, figaId2: 20 }}, // elementData
+    { figaIdRecord: { cazzoId: 10, name: "FIGA RECORD"}, cazzoId: 10, cazzoIdRecord: { a: 10, figaId: 20, }}, // elementData
     {
       storeUrlPrefix: 'stores',
       fetchUrlModifier: url => `/something/${url}`,
@@ -708,7 +726,7 @@ async function run() {
   console.log('Result of loadData:')
   console.log(ldRes)
   console.log('\n')
-  /*
+  
   console.log(
     dataUrlInfoFromUrl(
       '/stores/figa/:figaId/cazzo/:cazzoId/people/:personId/addresses', 
@@ -716,7 +734,7 @@ async function run() {
       true
     )
   )
-  */
 }
 
 run()
+*/
