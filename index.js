@@ -6,7 +6,7 @@
 // the user with ID 10. Viewing /users should display all users as a list; /users/10/addresses should display all addresses
 // belonging to user with ID 10; /users/10/addresses/20 should display the address with ID 20, owned by the user with ID 10.
 // This code assumes that each type of datum (users, addresses, etc.) will have an endpoint, and that each endpoint provides
-// a way to get a specific ID (e.g. /users/10) and to get an array (e.g. /users or /addresses). They are called "stores" in
+// a way to get a specific ID (e.g. /users/10) and to get a list of records (e.g. /users or /addresses). They are called "stores" in
 // the code, since they are endpoints that store data. The code also expects the endpoint to following the same name convention
 // as the URL -- so, for example viewing /users/10 in the Single Page Application will run a GET request on the URL
 // /users/10; or, if viewing the page /users/10/addresses/20, it will make two requests, /users/10 and /addresses/20 (unless
@@ -16,19 +16,19 @@
 // as properties with the suffix `Record`. For example:
 //
 // * loading the page /users/10 in an SPA, assuming a page path of /users/:userId should result in the `loadedData` object 
-//   containing `{ usersRecord: { id: 10, name: ..., ... } }`;
+//   containing `{ userIdRecord: { id: 10, name: ..., ... } }`;
 //
 // * loading the page `/users/10/address/20` assuming a page path of /users/:userId/addresses/:addressId should result
-// in the `loadedData` object containing `{ usersRecord: { id: 10, name: '..., ... }, addressesRecord: { id: 20, ... } }` 
+// in the `loadedData` object containing `{ userIdRecord: { id: 10, name: '..., ... }, addressIdRecord: { id: 20, ... } }` 
 //
 // ## Minimising requests
 //
 // There is a case to be made, however, where loading /addresses/20 will return a record which _already includes_ all the data you
 // would possibly need for the _user_ with ID 10, as long as the address record follows an established naming convention.
 //
-// For example, loading /addresses/20 might return a record that includes the key `usersRecord` (`{ usersRecord: {id: 2, ...}}`) 
+// For example, loading /addresses/20 might return a record that includes the key `userIdRecord` (`{ userIdRecord: {id: 2, ...}}`) 
 // If that is the case, _then_ call /users/1 would be a very expensive waste of resources (bandwidth, server power, DB requests,
-// and so on). If loading /addresses/20 returns a record which will include the property `usersRecord`, then the second
+// and so on). If loading /addresses/20 returns a record which will include the property `userIdRecord`, then the second
 // request would be wasteful, and won't be carried out. Note that queries should be carried out in reverse order, so that
 // if the page `/users/10/address/20` is visited, the address record will be loaded first, and then the user record. This
 // is because the last record is likely to be more specific than the previous ones -- and possibly already contain the
@@ -108,7 +108,7 @@ async function loader (dataUrl = '', routingData = {}, isList = false, elementDa
 //    the data URL a `:something` rather than a clear store name. 
 //  * `elementData` - the object which _might_ contain properties with preloaded data. For example for a data URL
 //    like `/users/:userId/address/:addressId`, if the elementData object already contains the
-//    properties `usersRecord` and `addressesRecord`, then nothing will be loaded. This is useful in the context
+//    properties `userIdRecord` and `addressIdRecord`, then nothing will be loaded. This is useful in the context
 //    of `elementData` being the HTML custom element displaying the information, and having properties set.
 //  * `config` - an object with further configuration parameters:
 //    * `storeUrlPrefix`. The prefix used to make GET calls to the store.
@@ -253,10 +253,10 @@ async function loader (dataUrl = '', routingData = {}, isList = false, elementDa
 // When reading this code, remember that _the ultimate goal of this function is to add properties to the `loadedElementData`
 // object. The name of the properties will match the idParams names, followed by the word
 // `Record`. For example the data URL `/users/:userId/address/:addressId` will need to ensure that the properties
-// `usersRecord` and `addressesRecord` are added to  the `loadedElementData` object -- unless they are already
+// `userIdRecord` and `addressIdRecord` are added to  the `loadedElementData` object -- unless they are already
 // present in the `elementData` record.
 // 
-// In the case above, if `usersRecord` and `addressesRecord` are _already_ defined in `elementData`, then _nothing_
+// In the case above, if `userIdRecord` and `addressIdRecord` are _already_ defined in `elementData`, then _nothing_
 // should be loaded.
 //
 // At the same time, if the page path actually is `/addresses/:addressId` and the data URL is
@@ -266,7 +266,7 @@ async function loader (dataUrl = '', routingData = {}, isList = false, elementDa
 // the fetching of the address with ID 10, and then the fetching of the user with a not-yet-specified ID. So, where does
 // the user ID actually come from? What will happen is that the address with ID 10 will be fetched, and if the record has a
 // property called `userId`, that will be taken as the correct value for the `fetch` call in the `users` store.
-// As explained already several times, if the property `usersRecord` is already present in the newly loaded address record,
+// As explained already several times, if the property `userIdRecord` is already present in the newly loaded address record,
 // then loading will be skipped for the user record.
 // If no userId property can be found in the address object, the load will fail.
 //
@@ -324,29 +324,29 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 // When the `while` loop starts, `resolvedIdParamsValues` is `{ addressId: 20, userId: null }` and `loadedElementData` is `{}`.
 // The for cycle starts: the first key is `addressId` (the last one). Since the value is not null (in fact, it's 20).
 // The first value considered is `addressId`, which has a value of 20. Since `loadedElementData` doesn't include a
-// property `addressesRecord` (yet), `toLoad` array will have one entry added (to load the address). And since
+// property `addressIdRecord` (yet), `toLoad` array will have one entry added (to load the address). And since
 // aggressive loading is off, only one entry will be added in the `for` cycle -- which breaks away.
 // 
 // Once out, there is one entry to load: the promise is resolved, the loading of the address record actually happens.
-// Once loaded, the full record is added to `loadedElementData` (with key `addressesRecord`).
+// Once loaded, the full record is added to `loadedElementData` (with key `addressIdRecord`).
 // The record is then analysed: does it contain a known `idParam`? As it turns out, it does: the record
 // has `{ userId: 10, addressLine1: ..., ...}`. So, the known `idParam` is added to `resolveIdParamsValue` (with key
 // `addressId`).
 // 
 // The endless `while` cycle will start again. However, this time `resolvedIdParamsValues` is 
-// `{ addresses: 20, users: 10 }` and `loadedElementData` is `{ addressesRecord: { userId: 10, ... } }`.
-// The first value considered is `addressId`, value `20`. Since there is _already_ a key `addressesRecord` in
+// `{ addresses: 20, users: 10 }` and `loadedElementData` is `{ addressIdRecord: { userId: 10, ... } }`.
+// The first value considered is `addressId`, value `20`. Since there is _already_ a key `addressIdRecord` in
 // `loadedElementData`, the value is essentially skipped with a `continue` statement.
 // The next value considered is `userId`, value `10` (which came from the addressId object, when it was loaded).
 // Since `loadedElementData` doesn't include a
-// property `usersRecord` (yet), `toLoad` array will have one entry added (to load the user). And since
+// property `userIdRecord` (yet), `toLoad` array will have one entry added (to load the user). And since
 // aggressive loading is off, only one entry will be added in the `for` cycle -- which breaks away.
 // 
 // Once out, there is one entry to load: the promise is resolved, the loading of the user record actually happens, at
 // which point the returned record is analysed: does it contain a known `idParam`? It doesn't, so nothing happens.
 // 
 // The endless `while` cycle will start again. `resolvedIdParamsValues` is still `{ addresses: 20, useres: 10 }`,
-// but `loadedElementData` includes the `usersRecord` property `{ addressesRecord: { userId: 10, ... }, usersRecord: { ... } }`.
+// but `loadedElementData` includes the `userIdRecord` property `{ addressIdRecord: { userId: 10, ... }, userIdRecord: { ... } }`.
 // 
 // This means that both `idParams` will effectively skip. At the end of the cycle, the `toLoad` array will be empty, _and_
 // the flag `nullAndUnloadedPresent` will be false: this is the cue to break the not-so-endless `while` cycle.
@@ -360,17 +360,17 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 // When the `while` loop starts, `resolvedIdParamsValues` is `{ addressId: 20, userId: null }` and `loadedElementData` is `{}`.
 // The for cycle starts: the first key is `addressId` (the last one). Since the value is not null (in fact, it's 20).
 // The first value considered is `addressId`, which has a value of 20. Since `loadedElementData` doesn't include a
-// property `addressesRecord` (yet), `toLoad` array will have one entry added (to load the address). And since
+// property `addressIdRecord` (yet), `toLoad` array will have one entry added (to load the address). And since
 // aggressive loading is off, only one entry will be added in the `for` cycle -- which breaks away.
 // 
 // Once out, there is one entry to load: the promise is resolved, the loading of the address record actually happens.
-// Once loaded, the full record is added to `loadedElementData` (with key `addressesRecord`).
+// Once loaded, the full record is added to `loadedElementData` (with key `addressIdRecord`).
 // The record is then analysed: does it contain a known `idParam`? The answer is no; the `resolveIdParamsValue`
 // is left unchanged.
 // 
 // The endless `while` cycle will start again. The `resolvedIdParamsValues` variable is still 
-// `{ addresses: 20, users: null }` and `loadedElementData` is `{ addressesRecord: { userId: 10, ... } }`.
-// The first value considered is `addressId`, value `20`. Since there is _already_ a key `addressesRecord` in
+// `{ addresses: 20, users: null }` and `loadedElementData` is `{ addressIdRecord: { userId: 10, ... } }`.
+// The first value considered is `addressId`, value `20`. Since there is _already_ a key `addressIdRecord` in
 // `loadedElementData`, the value is essentially skipped with a `continue` statement.
 // The next value considered is `userId`, value `null` -- which sets the `nullAndUnloadedPresent` variable to `true`.
 //  
@@ -560,7 +560,7 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 //
 // In detail:
 // * `loadedElementData`. It looks for properties in the record with names matching the store name and `Record` (such
-//    as `usersRecord`). 
+//    as `userIdRecord`). 
 // * `resolvedIdParamsValues` and `resolvedListFilter`. It looks for properties in the record with names matching
 //    idParams (such as `userId` in the address record), and uses it to fill in the blanks
 // Rather than using recursion, the function analyses the passed `record`: if it finds propperties that represent
@@ -605,7 +605,7 @@ function lookIntoRecord(record, elementData, loadedElementData, resolvedIdParams
       }
 
 // Look for a `[...idParam...]Record` entry in the loaded record. For example the record for the addresses
-// store might contain the `usersRecord` property, and -- since the URL includes 
+// store might contain the `userIdRecord` property, and -- since the URL includes 
 // `/users/:userId/addresses/:addressId` -- it will be assumed to contain a valid record for the `users` store
 // If that is the case, the property's content (supposed to be a full record object) will be assigned to
 // `loadedElementData` object for that store straight away.
