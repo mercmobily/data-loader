@@ -118,6 +118,7 @@ export async function loader (dataUrl = '', routingData = {}, isList = false, el
 //      `searchParams` and `dataUrlInfo`
 //    * `aggressiveLoading`. A flag that will enable aggressive loading (more requests, and less chance to minimise
 //      the number of requests)
+//    * `fetch`. The function used to fetch. Must have the exact same signature as `window.fetch()`
 //
 // The `loader` function works in two steps.
 //
@@ -638,111 +639,4 @@ function lookIntoRecord(record, elementData, loadedElementData, resolvedIdParams
     }
   }
 }
-// **********************************************
-// END OF function lookIntoRecord(record)
-// **********************************************
 
-/*
-async function fetchFAKE(url, isList) {
-  console.log('FETCHED: ', url)
-  if (isList) {
-    return [
-      {
-        z1: 10,
-        z2: 20,
-        z3: 30
-      },
-      {
-        z1: 40,
-        z2: 50,
-        z3: 60
-      }
-    ]
-  } else {
-
-    const storeComponents = url.split('/')
-    const store = storeComponents[storeComponents.length - 2]
-    switch(store) {
-      case 'addresses':
-        return { addresses1: 'a', personId: 20, personIdRecord: 'PERSONIDRECORD' }
-        break
-
-      case 'people':
-          return { people: 'a' }
-        break
-
-      case 'cazzo':
-        return { cazzo1: 'a', figaId: 10, figaIdRecord: { cazzoId: 10, name: 'FIGAIDRECORD' }}
-        break
-    }
-    return {
-      id: 10,
-      something: 20,
-      cazzoId: 30,
-      cazzoIdRecord: 'BINGO'
-    }
-  }
-}
-*/
-
-/*
-async function run() {
-
-
-  // async function loader (dataUrl = '', routingData = {}, isList = false, elementData, config) {
-
-  const r = await loader(
-    '/stores/figa/:figaId/cazzo/:cazzoId/peopleExtra/:personId/people/:personId/addresses/:addressId/berths', 
-    // '/stores/people/:personId/addresses/:addressId', 
-    // '/stores/people/:stevedorePersonId/addresses/:addressId', 
-    { figaId: 100, cazzoId2: 10, personId2: 10, addressId: 20},
-    true,
-    { figaIdRecord: { cazzoId: 10, name: "FIGA RECORD"}, cazzoId: 10, cazzoIdRecord: { a: 10, figaId: 20, }}, // elementData
-    {
-      storeUrlPrefix: 'stores',
-      fetchUrlModifier: url => `/something/${url}`,
-      aggressiveLoading: false 
-    }
-  )
-
-  console.log('Result of loader:')
-  console.log(r)
-  console.log('\n')
-  
-  return
-
-
-  let ld
-  ld = await makeUpDataUrlInfo(
-    '/stores/figa/:figaId/cazzo/:cazzoId/people/:personId/addresses/:addressId/berths', 
-    // '/stores/people/:personId/addresses/:addressId', 
-    { figaId2: 100, cazzoId2: 10, personId: 10, addressId: 20},
-    true 
-  )
-
-  console.log('Load info from parameters:')
-  console.log(ld)
-  console.log('\n')
-
-  const el = { cazzoIdRecord: { a: 10, figaId: 20 }}
-
-  const ldRes = await loadData(ld, el, { storeUrlPrefix: 'stores', fetchUrlModifier: url => `/something/${url}`, aggressiveLoading: false })
-  console.log('El after running loadData:')
-  console.log(el)
-  console.log('\n')
-  
-  console.log('Result of loadData:')
-  console.log(ldRes)
-  console.log('\n')
-  
-  console.log(
-    dataUrlInfoFromUrl(
-      '/stores/figa/:figaId/cazzo/:cazzoId/people/:personId/addresses', 
-      { personId: 10 },
-      true
-    )
-  )
-}
-
-run()
-*/
