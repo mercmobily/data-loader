@@ -6,6 +6,7 @@ const MemoryMixin = require('jsonreststores/jsonreststores-mem.js')
 class Store extends MemoryMixin(HTTPMixin(JsonRestStores)) {
   static get schema () {
       return new Schema({
+      id: { type: 'id', searchable: true },
       name: { type: 'string', trim: 60 },
       surname: { type: 'string', searchable: true, trim: 60 }
       })

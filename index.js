@@ -86,11 +86,12 @@
 //
 // The function that does the magic is this one:
 
-async function loader (dataUrl = '', routingData = {}, isList = false, elementData, config) {
+export async function loader (dataUrl = '', routingData = {}, isList = false, elementData, config) {
   const dataUrlInfo = makeUpDataUrlInfo (dataUrl, routingData, isList)
 
   return loadData (dataUrlInfo, dataUrl, routingData, isList, elementData, config)
 }
+
 
 // The parameters for the `loader()` function are:
 // * `dataUrl` - the data URL that will spell out, in URL format, the store and ID fields to load. For example,
@@ -280,6 +281,7 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
   const storeUrlPrefix = config.storeUrlPrefix
   const fetchUrlModifier = config.fetchUrlModifier
   const aggressiveLoading = !!config.aggressiveLoading
+  const fetch = config.fetch || window.fetch
 
 // The hash store2IdParams is also turned into something shorter, since it will be used a lot in the following ode 
   const store2IdParams = dataUrlInfo.store2IdParams
@@ -384,8 +386,8 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 // analysing a record twice. `nullAndUnloadedPresent` and `toLoad` are variables that will change in the `for` cycle.
 
   const alreadylookedInto = {}
+  let totalLoads = 0
   while (true) { 
-    debugger
     let nullAndUnloadedPresent = false
     const toLoad = []
 
@@ -449,13 +451,17 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
           
           // Manipulate the fetch URL as needed. Note that the prefix is part of the
           // nakedStoreUrl
-          idParamValue = resolvedIdParamsValues[store]
-          nakedStoreUrl = `${storeUrlPrefix}/${store}`
+          let idParamValue = resolvedIdParamsValues[store]
+          let nakedStoreUrl = `${storeUrlPrefix}/${store}`
           let url = `${nakedStoreUrl}/${idParamValue}`
+          // console.log('loading URL:', url)
           if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(url, store, nakedStoreUrl, idParamValue, {}, dataUrlInfo)
 
           // Actually fetch the record
-          let record = await fetch(url)
+          debugger
+          let response = await fetch(url)
+          let record = await response.json()
+
           loadedElementData[`${idParam}Record`] = record
 
           if (!alreadylookedInto[`${idParam}Record`]) {
@@ -497,6 +503,7 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
       // Load all pending store stuff
       let p
       if (toLoad.length) p = await Promise.all(toLoad)
+      totalLoads += toLoad.length
     }
 
     // This point demarks the end of the while cycle. If the code reaches this point,
@@ -550,7 +557,8 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
   return {
     loadedElementData,
     resolvedIdParamsValues,
-    resolvedListFilter: resolvedListFilter || null
+    resolvedListFilter: resolvedListFilter || null,
+    totalLoads
   }
 }
 
@@ -613,7 +621,7 @@ function lookIntoRecord(record, elementData, loadedElementData, resolvedIdParams
 // The property's content will _also_ ne added to the list of records to be checked, which will make this very
 // while() cycle go for longer, since the statement `r = recordsToCheck.shift()` will return another record.
 
-      const elementDataRecord = elementData[`${idParam}Record]`] || loadedElementData[`${idParam}Record]`]
+      const elementDataRecord = elementData[`${idParam}Record`] || loadedElementData[`${idParam}Record`]
 
       if (!elementDataRecord && typeof r[`${idParam}Record`]  !== 'undefined') {
         loadedElementData[`${idParam}Record`] = r[`${idParam}Record`]                  
