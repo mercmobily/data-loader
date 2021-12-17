@@ -543,13 +543,14 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
     
     /* Manipulate the fetch URL as needed. Note that the prefix is part of the nakedStoreUrl */
     let searchParams = new URLSearchParams(resolvedListFilter).toString()
-    nakedStoreUrl = `${storeUrlPrefix}/${dataUrlInfo.listStore}`
-    searchParamsAsString = searchParams ? '?' + searchParams : searchParams 
+    let nakedStoreUrl = `${storeUrlPrefix}/${dataUrlInfo.listStore}`
+    let searchParamsAsString = searchParams ? '?' + searchParams : searchParams 
     let url = `${nakedStoreUrl}${searchParamsAsString}`
     if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(url, dataUrlInfo.listStore, nakedStoreUrl, null, searchParams, dataUrlInfo)
 
     /* Actually fetch the list */
-    loadedElementData[`${dataUrlInfo.listStore}List`] = await fetch(url, true)
+    const response = await fetch(url)
+    loadedElementData[`${dataUrlInfo.listStore}List`] = await response.json() 
   }
 
   // The end result of ths function, as explained at the very beginning, is making network requests

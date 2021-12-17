@@ -248,6 +248,37 @@ describe(`Initialising tiny memory data server`, async function () {
       expect(r).not.to.have.nested.property('loadedElementData.addressIdRecord')
     })
 
+    it('1 param, with list at the end', async function () {
+      
+      const r = await loader(
+        '/users/:userId/addresses', 
+        { userId: 1 },
+        true,
+        { },
+        defaultConfig
+      )
+      expect(r.totalLoads).to.be.a('number').to.equal(1)
+      expect(r).to.have.nested.property('loadedElementData.userIdRecord')
+      expect(r).to.have.nested.property('loadedElementData.addressesList')
+      expect(r.loadedElementData.addressesList).to.be.an('array').lengthOf(4);
+    })
+
+    it('1 param, with list at the end, no need to load parameter', async function () {
+      
+      const r = await loader(
+        '/users/:userId/addresses', 
+        { userId: 1 },
+        true,
+        { userIdRecord: chiara},
+        defaultConfig
+      )
+      expect(r.totalLoads).to.be.a('number').and.equal(0)
+      expect(r).not.to.have.nested.property('loadedElementData.userIdRecord')
+      expect(r).to.have.nested.property('loadedElementData.addressesList')
+      expect(r.loadedElementData.addressesList).to.be.an('array').lengthOf(4);
+    })
+
+
     it('Not enough information 1', async function () {
       const consoleErr = console.error
       console.error = () => {}
