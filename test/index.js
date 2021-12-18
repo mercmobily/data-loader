@@ -131,11 +131,18 @@ describe(`Initialising tiny memory data server`, async function () {
     await tags.implementInsert({ body: { id: 5, userId: 1, name: 'Chiara Tag 1' }})
     await tags.implementInsert({ body: { id: 6, userId: 1, name: 'Chiara Tag 2' }})
     await tags.implementInsert({ body: { id: 7, userId: 1, name: 'Chiara Tag 3' }})  
+
+    /*
+    // Uncomment this chunk and add your own code for learning purposes
+    process.exit(1)
+    */
   })
 
 // The code above will be execute _before_ each tests. In this case, all that is 
 // needed is the closure of the server
   after(async function () {
+
+    /* Add your own code here to play around */
     await server.close()
   })
 
