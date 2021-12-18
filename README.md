@@ -1,10 +1,27 @@
 # data-loader
-=============
 
 [![npm version][npm-image]][npm-url]
 [![install size][install-size-image]][install-size-url]
 
 A data loader for SPA (Single Page Applications)
+This module will aid Single Page Applications to load JSON data using REST automatically.
+
+It is assumed that a routing library like routify will extrapolate IDs from the browser's location,
+where `/user/:userId` (the page URL) will be resolved as `{ userId: 1 }` for URLs such as `/user/1`
+
+The data URL for a page on the other hand will contain a list of stores and IDs, such 
+as `/usersEndpoint/:userId` where `usersEndpoint` is the REST store nane, and `:userId` is the
+ID that will be loaded. So, in this case the rest call will be made to the endpoint `/usersEndpoint/1`.
+
+There might be more than one store defined in the data URL and the page URL. For example the page URL might be
+`/users/:userId/addresses/:addressId` and the data URL might be `/usersEndpoint/:userId/addressesEndpoint/:addressId`
+
+The end result is that by using this library, your page will automatically load all of the data it needs from
+as many REST endpoints as necessary. As long as your naming conventions are sane, you will never have to worry
+about loading data again.
+
+## Setting up a testing environment
+
 
 
 ## Opinionated data loader
