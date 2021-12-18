@@ -1,4 +1,13 @@
 // # Location-based record loading
+
+/*
+  TODO:
+  * Write user documentation for data-loader
+  * Make nice web site for the data loader
+  * Write the full globalFetch
+  * Make the mixins for data loading and using globalFetch
+*/
+
 //
 // All Single Page Applications need to handle their routing. This means that for example when viewing a contact,
 // the page is supposed to have, in the Location bar, all of the information it needs to load that contact's record. 
@@ -459,7 +468,6 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
           if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(url, store, nakedStoreUrl, idParamValue, {}, dataUrlInfo)
 
           // Actually fetch the record
-          debugger
           let response = await fetch(url)
           let record = await response.json()
 
