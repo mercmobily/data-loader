@@ -22,7 +22,7 @@ A data loader for SPA (Single Page Applications)
 GPL
 
 
-[npm-image]: https://flat.badgen.net/npm/v/node-fetch
-[npm-url]: https://www.npmjs.com/package/node-fetch
-[install-size-image]: https://flat.badgen.net/packagephobia/install/node-fetch
-[install-size-url]: https://packagephobia.now.sh/result?p=node-fetch
+[npm-image]: https://flat.badgen.net/npm/v/spa-data-loader
+[npm-url]: https://www.npmjs.com/package/spa-data-loader
+[install-size-image]: https://flat.badgen.net/packagephobia/install/spa-data-loader
+[install-size-url]: https://packagephobia.now.sh/result?p=spa-data-loader
