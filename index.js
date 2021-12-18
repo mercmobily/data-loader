@@ -2,7 +2,7 @@
 
 /*
   TODO:
-  * Write user documentation for data-loader
+  * Write user documentation for data-loader (README.md, API.md)
   * Make nice web site for the data loader
   * Write the full globalFetch
   * Make the mixins for data loading and using globalFetch
