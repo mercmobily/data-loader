@@ -128,6 +128,7 @@ export async function loader (dataUrl = '', routingData = {}, isList = false, el
 //    * `aggressiveLoading`. A flag that will enable aggressive loading (more requests, and less chance to minimise
 //      the number of requests)
 //    * `fetch`. The function used to fetch. Must have the exact same signature as `window.fetch()`
+//    * `verbose`. If true, it will print information to the console.
 //
 // The `loader` function works in two steps.
 //
@@ -468,6 +469,7 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
           if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(url, store, nakedStoreUrl, idParamValue, {}, dataUrlInfo)
 
           // Actually fetch the record
+          if (config.verbose) console.log('FETCHING:', url)
           let response = await fetch(url)
           let record = await response.json()
 
@@ -557,6 +559,7 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
     if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(url, dataUrlInfo.listStore, nakedStoreUrl, null, searchParams, dataUrlInfo)
 
     /* Actually fetch the list */
+    if (config.verbose) console.log('FETCHING:', url)
     const response = await fetch(url)
     loadedElementData[`${dataUrlInfo.listStore}List`] = await response.json() 
   }

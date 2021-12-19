@@ -15,6 +15,7 @@ class Store extends MemoryMixin(HTTPMixin(JsonRestStores)) {
   static get version () { return '1.0.0' }
 
   static get storeName () { return 'users' }
+  static get publicURLprefix () { return '/stores' }
   static get publicURL () { return '/users/:id' }
 
   static get handlePut () { return true }

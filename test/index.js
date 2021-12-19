@@ -94,9 +94,9 @@ describe(`Initialising tiny memory data server`, async function () {
     port = server.address().port
     url = `http://127.0.0.1:${port}/`
     defaultConfig = {
-      storeUrlPrefix: `http://127.0.0.1:${port}/1.0.0`,
+      storeUrlPrefix: `http://127.0.0.1:${port}/stores/1.0.0`,
       aggressiveLoading: false,
-      fetch 
+      fetch
     }
 
 // The next three variables represents the three stores used in the tests:
