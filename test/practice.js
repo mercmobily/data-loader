@@ -90,8 +90,8 @@ async function run() {
     /* Add your practice code here */
 
 
-    global.window = { location: { pathname: '/view-tags/5' } }
-    let params = locationMatch('/view-tags/:tagId')
+    global.window = { location: { pathname: '/view-users/1' } }
+    let params = locationMatch('/view-users/:userId')
     
     console.log('URL RESOLUTION:')
     console.log(params)

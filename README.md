@@ -126,9 +126,8 @@ Note that the full URL (`http://127.0.0.1:35763/stores/1.0.0/users/1`) comes fro
 `defaultConfig` (set as `http://127.0.0.1:${port}/stores/1.0.0`) followed by the store's URL in the second
 parameter (`/users/:userId`) with the `:userId` portion resolved to `1`.
 
-That `:userId` is the key common ground between routify and the loader. The page can be called whatever and
-not match the name of the store, as it is in this case (`/view-user`). However, the id parameters is `:userId`
-both for the page (`/view-users/:userId`) and for the data URL (`/users/:userId`).
+That `:userId` is the key common ground between routify and the loader. The page's url can be completely random
+and not match the name of the store -- as it is in this casem with `/view-user/:userId` being the page URL and `/users/userId` being the data URL . However, the id parameters is (and must be) `:userId` both for both of them.
 
 The full output will be as follows:
 
@@ -201,10 +200,9 @@ LOADER RESULT:
 
 There was no loading at all. The loader effectively skipped everything: the data was considered already loaded. This is why `totalLoads` is 0, and `loadedElementData` is an empty object.
 
-
 ### Normal load of a user and one of its tags (page /view-users/1/view-tags/2 loading data from /stores/users/1 and /stores/tags/4)
 
-The data URL can contain multiple stores. In this case, the IDs in the data URL are the same as the ones in the page URL:
+The data URL can contain multiple stores. In this case all the IDs in the data URL are the same as the ones in the page URL (`:userId` and `tagId`):
 
 ````
 global.window = { location: { pathname: '/view-users/1/view-tags/4' } }
@@ -257,6 +255,9 @@ In this case, there were _two_ network fetches: one for the tag with ID 4, and o
 
 ### Load of a user and one of its addresses (page /view-users/1/view-addresses/2 loading data from /stores/users/1 and /stores/addresses/5) SKIPPING one fetch call
 
+In this case, the loader will load the store `addresses` first by running the `fetch()` call. Since the fetched record _already_ had a property called `userIdRecord`, it will _not_ run another fetched call.
+Note that the network call is skipped _without_ checking that the user ID in the address matches the user ID in the data URL. That is assumed to be the case.
+
 
 ````
 global.window = { location: { pathname: '/view-users/1/view-addresses/5' } }
@@ -308,11 +309,7 @@ LOADER RESULT:
 }
 ````
 
-In this case, the loader started from the store `addresses` and ran the `fetch()` call. Since the fetched record _already_ had a property called `userIdRecord`, it did _not_ run another fetched call.
-Note that the network call is skipped _without_ checking that the user ID in the address matches the user ID in the data URL. That is assumed to be the case.
-
-
-### Only addressId in the URL (no userId); userId fished out of (fetched) addressIdRecord which included userIdRecord, only 1 call
+### Load data with the page only having addressId (no userId), whereas the store URL includes `userId` and `addressId`; userId is fished out of the (fetched) `addressIdRecord` record which includes userIdRecord, only 1 call
 
 This example shows that the data URL can have more IDs than the location URL. In this particular example the location URL only has the address ID. This is a typical use case where the page is `/view-addresses/5`, but the page itself also displays the user's name and other details (e.g. "Chiara's main address"). So, the data URL contains `:addressId` but _also_ `:userId`. Since the data loader has effectively no information on how to fetch the user, the user's information MUST come from the address record under the property `userIdRecord`: 
 
@@ -364,8 +361,8 @@ LOADER RESULT:
 
 The page will display properties of the `userIdRecord` object, as well as the `addressIdRecord` object. This means that if you decide to change the architecture of the application (changing the page's location, or even not returning the user record in the address), the user record will be in the same place (`userIdRecord`) and no refactoring will be needed in the elements themselves.
 
+### Load data with the page only having tagId (no userId), whereas the store URL includes `userId` and `addressId`; userId is fished out of the (fetched) `addressIdRecord` record, and is used for the second `fetch()` call to populate `userIdRecord`
 
-### Only addressId in the URL (no userId); userId fished out of (fetched) addressIdRecord which included userIdRecord; 2 calls since no userIdRecord in tagIdRecord
 
 ````
     global.window = { location: { pathname: '/view-tags/5' } }
@@ -409,18 +406,110 @@ LOADER RESULT:
 }
 ````
 
+### Load a (filtered) list, enabling filters
 
-### Only addressId in the URL (no userId); userId in the data URL, but no loading needed because it is already available in the element data
-
-In this example, the page URL only has tagId (the tag will be loaded). The data URL, however, also has `userId` (it is `/users/:userId/tags/:tagId`. So, this element will use `userIdRecord.name`. However! Since the userIdRecord is passed to the loader already under the `elementData` parameter, no
-loading will be needed.
-
-This is a very common pattern where the parent page already has the user information, and a child element of this element (in a child page) allows you to have more details about the tag. In this case, in order to minimise the network calls, the `userIdRecord` property is passed.
-
+The loader allows to specify, in its third parameter, if the data URL ends with a store name which will be loaded as a list. In this case, the page URL is `/view-users/:userId/all-tags`; the only part that really matters is `userId`; however, the data URL is  `/users/:userId/tags`. Since the third parameter is set to `true`, that `tags` at the end of the data URL is expected to be a store:
 
 ````
-   global.window = { location: { pathname: '/view-tags/5' } }
-    let params = locationMatch('/view-tags/:tagId')
+    global.window = { location: { pathname: '/view-users/1/all-tags' } }
+    let params = locationMatch('/view-users/:userId/all-tags')
+    
+    console.log('URL RESOLUTION:')
+    console.log(params)
+    
+    const r = await loader(
+      '/users/:userId/tags', 
+      params,
+      true,
+      { userIdRecord: chiara },
+      defaultConfig
+    )
+
+    console.log('LOADER RESULT:')
+    console.log(r)
+````
+
+The result is:
+
+````
+URL RESOLUTION:
+
+{ userId: '1', __PATH__: '/view-users/:userId/all-tags' }
+
+FETCHING: http://127.0.0.1:33245/stores/1.0.0/users/1
+FETCHING: http://127.0.0.1:33245/stores/1.0.0/tags?userId=1
+
+LOADER RESULT:
+
+{
+  loadedElementData: {
+    userIdRecord: { name: 'Chiara', surname: 'Fabbietti', id: 1 },
+    tagsList: [ [Object], [Object], [Object], [Object] ]
+  },
+  resolvedIdParamsValues: { users: '1' },
+  resolvedListFilter: { userId: '1' },
+  totalLoads: 1
+}
+````
+
+The list store is always the last one to be loaded. This is because the list store's query to the server is different: it doesn't include a specific ID, but id _does_ includes filtering in the query string; the filtering will include _all_ IDs present in the data URL. In this case, the data URL only had `userId` -- which is why the query for the list will be `/stores/1.0.0/tags?userId=1`. This ensures that only the tags belnging to that particular user will make their way into the resulting dataset. 
+
+Note that the loadedElementData's property for the list is called `tagsList` (no `Record` suffix). There will only ever be one property with the `List` suffix, and it will only ever be there is the third parameter for the loader is set to `true`. If it _is_ set to true, then the last part of the data URL _must_ be a store name, which will be queried with the appropriate query string for filtering.
+
+### Load a (filtered) list, enabling filters, skipping one fetch
+
+The same principles seen before in terms of pre-loading will apply here. This code for example already has `userIdRecord` in the element data parameter. So, the user will not be fetched:
+
+````
+    global.window = { location: { pathname: '/view-users/1/all-tags' } }
+    let params = locationMatch('/view-users/:userId/all-tags')
+    
+    console.log('URL RESOLUTION:')
+    console.log(params)
+    
+    const r = await loader(
+      '/users/:userId/tags', 
+      params,
+      true,
+      { userIdRecord: chiara },
+      defaultConfig
+    )
+
+    console.log('LOADER RESULT:')
+    console.log(r)
+````
+
+The end result will only make one network call:
+
+````
+URL RESOLUTION:
+
+{ userId: '1', __PATH__: '/view-users/:userId/all-tags' }
+
+FETCHING: http://127.0.0.1:42473/stores/1.0.0/tags?userId=1
+
+LOADER RESULT:
+
+{
+  loadedElementData: { tagsList: [ [Object], [Object], [Object], [Object] ] },
+  resolvedIdParamsValues: { users: '1' },
+  resolvedListFilter: { userId: '1' },
+  totalLoads: 0
+}
+````
+
+Note that only one fetch() call is done.
+
+### Not enough information
+
+Sometimes, the loader will fail for lack of information. The loader goes to great length scanning the data in `elementData` and the data loaded: it will look for anything that looks like an ID, based on the parameters names. This was shown extensively in the examples above. However, sometimes there just isn't enough information.
+
+For exampe this won't work:
+
+````
+
+    global.window = { location: { pathname: '/view-users/1' } }
+    let params = locationMatch('/view-users/:userId')
     
     console.log('URL RESOLUTION:')
     console.log(params)
@@ -437,34 +526,16 @@ This is a very common pattern where the parent page already has the user informa
     console.log(r)
 ````
 
-Result:
+The problem here is that the page URL only provides `:userId`, whereas the loader also needs `tagId` which is nowhere to be seen.
 
-````
-URL RESOLUTION:
+## Closing notes
 
-````
-{ tagId: '5', __PATH__: '/view-tags/:tagId' }
+The main benefit of using this data loader is that you can code your element knowing that specific data will be there. This data can come from a direct network load, from a property of a record after a network load, from an outer element, or from a property of a record passed by the outer element.
 
-FETCHING: http://127.0.0.1:39583/stores/1.0.0/tags/5
+The point is that where the data comes from _shouldn't matter_. You should be able to refactor your application to minimise network traffic, and _not_ change existing elements. You should be able to improve the server code, providing full objects for parent records, and know that the app will "magically" make fewer network calls.
 
-LOADER RESULT:
+This is precisely the goal of this data loader.
 
-{
-  loadedElementData: { tagIdRecord: { id: 5, userId: 1, name: 'Chiara Tag 1' } },
-  resolvedIdParamsValues: { users: 1, tags: '5' },
-  resolvedListFilter: {},
-  totalLoads: 1
-}
-````
-
-
-###     it('1 param, with list at the end', async function () {
-
-###     it('1 param, with list at the end, no need to load parameter', async function () {
-
-### Not enough information 1
-
-### Not enough information 2
 
 ## License
 
