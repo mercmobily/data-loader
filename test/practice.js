@@ -90,19 +90,43 @@ async function run() {
     /* Add your practice code here */
 
 
-global.window = { location: { pathname: '/view-user/1' } }
-let params = locationMatch('/view-user/:userId', () => true, true)
+    global.window = { location: { pathname: '/view-tags/5' } }
+    let params = locationMatch('/view-tags/:tagId')
+    
+    console.log('URL RESOLUTION:')
+    console.log(params)
+    
+    const r = await loader(
+      '/users/:userId/tags/:tagId', 
+      params,
+      false,
+      { userIdRecord: chiara },
+      defaultConfig
+    )
 
-console.log(params)
+    console.log('LOADER RESULT:')
+    console.log(r)
 
-const r = await loader(
-  '/users/:userId', 
-  params,
-  false,
-  { userIdRecord: tony },
-  defaultConfig
-)
-console.log(r)
+  
+
+    /*
+    global.window = { location: { pathname: '/view-users/1/view-tags/4' } }
+    let params = locationMatch('/view-users/:userId/view-tags/:tagId')
+    
+    console.log('URL RESOLUTION:')
+    console.log(params)
+    
+    const r = await loader(
+      '/users/:userId/tags/:tagId', 
+      params,
+      false,
+      { },
+      defaultConfig
+    )
+
+    console.log('LOADER RESULT:')
+    console.log(r)
+*/
 
 /*
     global.window = { location: { pathname: '/user/1/address/2' } }

@@ -47,7 +47,7 @@
 //
 // It is also assumed that a page might need more data from more stores than the ones used in in the page's URL.
 // For example, the application's URL might be /carModels/:carModelId; however, the page might want to _also_ display
-// information about the car maker for that model. 
+// information about the car _maker_ for that model. 
 // In this case, the element will have a dataUrl like this /carMakers/:carMakerId/carModels/:carModelId whereas the page's URL 
 // (just /carModels/:carModelId) will only provide enough information for one store call to carModels. Note that 
 // in most cases page URL and data URL will be the same; however, there are case like this one where a page's URL is 
