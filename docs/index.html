@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>index.md</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="style.css" rel="stylesheet">
+        <link rel="stylesheet" media="all" href="docco.css" />
+    </head>
+  
+    <body>
+        <div class="container">
+
+        <div class="header"><h1>Header</h1></div>
+
+        <div class="sidebar">
+          
+            <div class="toc">
+              <h3>Table of Contents</h3>
+              <ol>
+                
+                  
+                  <li>
+                    <a class="source" href="index.html">
+                      index
+                    </a>
+                  </li>
+                
+                  
+                  <li>
+                    <a class="source" href="code.html">
+                      code.js
+                    </a>
+                  </li>
+                
+              </ol>
+            </div>
+          
+        </div>
+
+        <div class="content">
+          
+            
+            <h2 id="a-data-loader-for-spa-single-page-applications">A data loader for SPA (Single Page Applications)</h2>
+
+            
+          
+            
+            <p>Most (all?) SPAs need to load different data depending on the browser’s location. Until now, each page had specific code to load the data it needed.</p>
+<p>No more. Welcome to data-loader. An opinionated data loader that will allow you to focus on your app, rather than repetitive boilerplate code.</p>
+<h2 id="introduction">Introduction</h2>
+
+            
+          
+            
+            <p>This module allows Single Page Applications to load JSON data using REST automatically, based on the location data.
+The idea is that any SPA should be able to load the data it needs based on the current location URL, and that the
+process of translating the location URL to the actual fetching of data should be automated.</p>
+<p>It is assumed that a routing library like routify will extrapolate IDs from the browser’s location,
+where <code>/view-users/:userId</code> (the page URL) will be resolved as <code>{ userId: 1 }</code> for URLs such as <code>/stores/users/1</code></p>
+<p>The data URL for a page on the other hand will contain a list of stores and IDs, such 
+as <code>/stores/users/:userId</code> where <code>users</code> is the REST store name, and <code>:userId</code> is the
+ID that will be loaded. So, in this case the rest call will be made to the endpoint <code>/stores/users/1</code>.</p>
+<p>There might be more than one store defined in the data URL and the page URL. For example the page URL might be
+<code>/view-users/:userId/view-addresses/:addressId</code> and the data URL might be <code>/stores/users/:userId/addresses/:addressId</code></p>
+<p>The end result is that by using this library, your page will automatically load all of the data it needs from
+as many REST endpoints as necessary. As long as your naming conventions are sane, you will never have to worry
+about loading data again: each page will know exactly how to load (or not load) its own data.</p>
+<h2 id="setting-up-a-playground-environment">Setting up a playground environment</h2>
+
+            
+          
+            
+            <p>Setting up a playground to test things out has the challenge that you need a number of existing (complex) 
+parts in order to replicate a real-world environment. Specifically:</p>
+<ul>
+<li>A JSON REST server (with example <em>data</em>) that will respond with the right records</li>
+<li>A routing library that will “resolve” a given location given a template</li>
+</ul>
+<p>Luckily, this is all done for you already. Under the directory “tests”, you will find a file called <code>practice.js</code>
+which includes everything you need.</p>
+<h3 id="the-json-rest-endpoints-stores">The JSON REST endpoints (stores)</h3>
+
+            
+          
+            
+            <p>In this playground, the same stores used for running tests are used. They are <code>Users.js</code>, <code>Addresses.js</code> and
+<code>Tags.js</code>. Both <code>Addresses.js</code> and <code>Tags.js</code> include <code>userId</code> in their schema, which means that multiple
+addresses and multiple tags are allowed for one user. Also, when loading an <code>address</code> record, an extra
+property called <code>userIdRecord</code> is returned: it is the <em>full</em> user record, the <em>same</em> that would be returned
+if a user were loaded directly. The URLs for those data stores are <code>/users/:userId</code>, <code>/addresses/:addressId</code> and
+<code>/tags/:tagdId</code>. This means that fetching <code>http://localhost/stores/users/1</code> will return the user with ID 1.</p>
+<p>The stores are prepped with dummy data: 4 users, where the first 2 users have 4 addresse and 4 tags attached. The
+data contained is clear by looking at the <code>practice.js</code> file.</p>
+<h3 id="the-routing-library">The routing library</h3>
+
+            
+          
+            
+            <p>Routing’s main concern in a SPA is to display the correct page. In this case, however, the main concern is to
+extrapolate the right IDs and then load the correct data depending on the URL.</p>
+<p>For example when viewing <code>/view-users/1</code>, if the URL matches a pattern, then it will be “resolved”. For example
+if the page URL (pattern) is <code>/view-users/:userId</code>, then resolving <code>/view-users/1</code> will output an object
+like this <code>{ userId: 1 }</code>.</p>
+<p>This is exactly what <code>routify</code> does. In order for <code>practice.js</code> to work, routify must be installed:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">npm install routify</span></span></code></pre>
+</code></pre>
+<p>Since routify is a javascript module, <code>practice.js</code> will load it with the call:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">  const locationMatch = (await import(&#39;../node_modules/routify/routify.js&#39;)).locationMatch</span></span></code></pre>
+</code></pre>
+<h2 id="example-use-cases">Example use cases</h2>
+
+            
+          
+            
+            <p>The following use cases are created by adding code into the function <code>practiceCode()</code> in the <code>practice.js</code> file.
+Make sure you have <code>routify</code> installed with <code>npm</code>, or the file won’t work.</p>
+<p>To run the practice file, just type <code>node practice.js</code> and see the result.</p>
+<p>In the rest of this guide, several use cases will be shown – really simple ones, to very uncommon and tricky ones.</p>
+<h3 id="normal-load-of-a-user-page-view-users1-loading-data-from-storesusers1">Normal load of a user (page /view-users/1 loading data from /stores/users/1)</h3>
+
+            
+          
+            
+            <p>This is a very common and very simple case: the page’s URL is <code>/view-users/1</code> while the page URL template
+is <code>/view-users/:userId</code>.</p>
+<p>This is the code for this test:</p>
+<pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-users/1&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-users/:userId&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #22863A">&#39;/users/:userId&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">  params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #1976D2">false</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  {}</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The first step, <code>global.window = ...</code>, makes sure that the global variable <code>window.location</code> mimics
+a browser viewing that page. The <code>locationMatch()</code> function of routify is run against the template
+<code>/view-users/:userId</code>, which will resul in an object like so: <code>{ userId: 1 }</code></p>
+<p>The loader is then called. </p>
+<p>The first parameter (<code>/users/:userId</code>) is the path of the store </p>
+<p>The second parameter (<code>{ userId: 1 }</code> is the <code>params</code> variable returned by routify, which includes the resolution done by routify.</p>
+<p>The third parameter (<code>false</code>) indicates that this is not a request for a list – more of that later.</p>
+<p>The fourth parameter is the data object, which may include data already preloaded. This is used in case the
+page already has the user object (possibly passed to it by a parent element), and therefore the loading would
+be unnecessary. More of this later.</p>
+<p>The last parameter is the default config, set earlier in the <code>practice.js</code> file.</p>
+<p>Once the <code>loader()</code> function runs, it will output <code>FETCHING: http://127.0.0.1:35763/stores/1.0.0/users/1</code> (since
+there is data to be fetched)</p>
+<p>Note that the full URL (<code>http://127.0.0.1:35763/stores/1.0.0/users/1</code>) comes from the default prefix set in
+<code>defaultConfig</code> (set as <code>http://127.0.0.1:${port}/stores/1.0.0</code>) followed by the store’s URL in the second
+parameter (<code>/users/:userId</code>) with the <code>:userId</code> portion resolved to <code>1</code>.</p>
+<p>That <code>:userId</code> is the key common ground between routify and the loader. The page’s url can be completely random
+and not match the name of the store – as it is in this casem with <code>/view-user/:userId</code> being the page URL and <code>/users/userId</code> being the data URL . However, the id parameters is (and must be) <code>:userId</code> both for both of them.</p>
+<p>The full output will be as follows:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">URL RESOLUTION:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{ userId: &#39;1&#39;, </span><span style="color: #6F42C1; font-weight: bold">__PATH__</span><span style="color: #24292EFF">: &#39;/view-users/:userId&#39; }</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:35763/stores/1.0.0/users/1</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">LOADER RESULT:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  loadedElementData: { userIdRecord: { name: &#39;Chiara&#39;, surname: &#39;Fabbietti&#39;, id: 1 } },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedIdParamsValues: { users: &#39;1&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedListFilter: {},</span></span>
+<span class="line"><span style="color: #24292EFF">  totalLoads: 1</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span></code></pre>
+</code></pre>
+<p>The most important part is that <code>loadedElementData</code> which includes <code>userIdRecord</code>: the result of the fetch
+call. The naming of the property, <code>userIdRecord</code>, is the result of the parameter name <code>userId</code> followed by
+<code>Record</code>.</p>
+<h3 id="normal-load-of-a-user-page-view-users1-loading-data-from-storesusers1-no-loading-necessary">Normal load of a user (page /view-users/1 loading data from /stores/users/1), NO loading necessary</h3>
+
+            
+          
+            
+            <p>In some cases, the data doesn’t need to be loaded since it’s already available. A typical (and common) example
+is one where the parent element will pass the record to the children elements – in this case, you don’t want
+each element to make a request to the server.</p>
+<p>This is achieved by having a property correctly named in the object (the ID, such as <code>userId</code>, followed by the word <code>Record</code>) passed as the fourth parameter of the loader:</p>
+<pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-users/1&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-users/:userId&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #22863A">&#39;/users/:userId&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">  params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #1976D2">false</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  { userIdRecord</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> tony }</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The end result will be:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">URL RESOLUTION:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{ userId: &#39;1&#39;, </span><span style="color: #6F42C1; font-weight: bold">__PATH__</span><span style="color: #24292EFF">: &#39;/view-users/:userId&#39; }</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">LOADER RESULT:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  loadedElementData: {},</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedIdParamsValues: { users: &#39;1&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedListFilter: {},</span></span>
+<span class="line"><span style="color: #24292EFF">  totalLoads: 0</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span></code></pre>
+</code></pre>
+<p>There was no loading at all. The loader effectively skipped everything: the data was considered already loaded. This is why <code>totalLoads</code> is 0, and <code>loadedElementData</code> is an empty object.</p>
+<h3 id="normal-load-of-a-user-and-one-of-its-tags-page-view-users1view-tags2-loading-data-from-storesusers1-and-storestags4">Normal load of a user and one of its tags (page /view-users/1/view-tags/2 loading data from /stores/users/1 and /stores/tags/4)</h3>
+
+            
+          
+            
+            <p>The data URL can contain multiple stores. In this case all the IDs in the data URL are the same as the ones in the page URL (<code>:userId</code> and <code>tagId</code>):</p>
+<pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-users/1/view-tags/4&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-users/:userId/view-tags/:tagId&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #22863A">&#39;/users/:userId/tags/:tagId&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">  params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #1976D2">false</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  { }</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The end result will be:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">URL RESOLUTION:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  userId: &#39;1&#39;,</span></span>
+<span class="line"><span style="color: #24292EFF">  tagId: &#39;4&#39;,</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #6F42C1; font-weight: bold">__PATH__</span><span style="color: #24292EFF">: &#39;/view-users/:userId/view-tags/:tagId&#39;</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:40443/stores/1.0.0/tags/4</span></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:40443/stores/1.0.0/users/1</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">LOADER RESULT:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  loadedElementData: {</span></span>
+<span class="line"><span style="color: #24292EFF">    tagIdRecord: { id: 4, userId: 1, name: &#39;Chiara Tag 0&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">    userIdRecord: { name: &#39;Chiara&#39;, surname: &#39;Fabbietti&#39;, id: 1 }</span></span>
+<span class="line"><span style="color: #24292EFF">  },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedIdParamsValues: { users: &#39;1&#39;, tags: &#39;4&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedListFilter: {},</span></span>
+<span class="line"><span style="color: #24292EFF">  totalLoads: 2</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span>
+<span class="line empty-line"></span></code></pre>
+</code></pre>
+<p>In this case, there were <em>two</em> network fetches: one for the tag with ID 4, and one for the user with ID 1.</p>
+<h3 id="load-of-a-user-and-one-of-its-addresses-page-view-users1view-addresses2-loading-data-from-storesusers1-and-storesaddresses5-skipping-one-fetch-call">Load of a user and one of its addresses (page /view-users/1/view-addresses/2 loading data from /stores/users/1 and /stores/addresses/5) SKIPPING one fetch call</h3>
+
+            
+          
+            
+            <p>In this case, the loader will load the store <code>addresses</code> first by running the <code>fetch()</code> call. Since the fetched record <em>already</em> had a property called <code>userIdRecord</code>, it will <em>not</em> run another fetched call.
+Note that the network call is skipped <em>without</em> checking that the user ID in the address matches the user ID in the data URL. That is assumed to be the case.</p>
+<pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-users/1/view-addresses/5&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-users/:userId/view-addresses/:addressId&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #22863A">&#39;/users/:userId/addresses/:addressId&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">  params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #1976D2">false</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  { }</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">  defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">)</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The result will be:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">URL RESOLUTION:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  userId: &#39;1&#39;,</span></span>
+<span class="line"><span style="color: #24292EFF">  addressId: &#39;5&#39;,</span></span>
+<span class="line"><span style="color: #24292EFF">  </span><span style="color: #6F42C1; font-weight: bold">__PATH__</span><span style="color: #24292EFF">: &#39;/view-users/:userId/view-addresses/:addressId&#39;</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:35383/stores/1.0.0/addresses/5</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">LOADER RESULT:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  loadedElementData: {</span></span>
+<span class="line"><span style="color: #24292EFF">    addressIdRecord: {</span></span>
+<span class="line"><span style="color: #24292EFF">      id: 5,</span></span>
+<span class="line"><span style="color: #24292EFF">      userId: 1,</span></span>
+<span class="line"><span style="color: #24292EFF">      line1: &#39;Chiara Address 1&#39;,</span></span>
+<span class="line"><span style="color: #24292EFF">      userIdRecord: </span><span style="color: #D32F2F">[Object]</span></span>
+<span class="line"><span style="color: #24292EFF">    },</span></span>
+<span class="line"><span style="color: #24292EFF">    userIdRecord: { name: &#39;Chiara&#39;, surname: &#39;Fabbietti&#39;, id: 1 }</span></span>
+<span class="line"><span style="color: #24292EFF">  },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedIdParamsValues: { users: &#39;1&#39;, addresses: &#39;5&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedListFilter: {},</span></span>
+<span class="line"><span style="color: #24292EFF">  totalLoads: 1</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span></code></pre>
+</code></pre>
+<h3 id="load-data-with-the-page-only-having-addressid-no-userid-whereas-the-store-url-includes-userid-and-addressid-userid-is-fished-out-of-the-fetched-addressidrecord-record-which-includes-useridrecord-only-1-call">Load data with the page only having addressId (no userId), whereas the store URL includes <code>userId</code> and <code>addressId</code>; userId is fished out of the (fetched) <code>addressIdRecord</code> record which includes userIdRecord, only 1 call</h3>
+
+            
+          
+            
+            <p>This example shows that the data URL can have more IDs than the location URL. In this particular example the location URL only has the address ID. This is a typical use case where the page is <code>/view-addresses/5</code>, but the page itself also displays the user’s name and other details (e.g. “Chiara’s main address”). So, the data URL contains <code>:addressId</code> but <em>also</em> <code>:userId</code>. Since the data loader has effectively no information on how to fetch the user, the user’s information MUST come from the address record under the property <code>userIdRecord</code>: </p>
+<pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">  </span><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-addresses/5&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-addresses/:addressId&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #22863A">&#39;/users/:userId/addresses/:addressId&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">      params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #1976D2">false</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      { }</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">    )</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The result is:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">URL RESOLUTION:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{ addressId: &#39;5&#39;, </span><span style="color: #6F42C1; font-weight: bold">__PATH__</span><span style="color: #24292EFF">: &#39;/view-addresses/:addressId&#39; }</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:35175/stores/1.0.0/addresses/5</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">LOADER RESULT:</span></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  loadedElementData: {</span></span>
+<span class="line"><span style="color: #24292EFF">    addressIdRecord: {</span></span>
+<span class="line"><span style="color: #24292EFF">      id: 5,</span></span>
+<span class="line"><span style="color: #24292EFF">      userId: 1,</span></span>
+<span class="line"><span style="color: #24292EFF">      line1: &#39;Chiara Address 1&#39;,</span></span>
+<span class="line"><span style="color: #24292EFF">      userIdRecord: </span><span style="color: #D32F2F">[Object]</span></span>
+<span class="line"><span style="color: #24292EFF">    },</span></span>
+<span class="line"><span style="color: #24292EFF">    userIdRecord: { name: &#39;Chiara&#39;, surname: &#39;Fabbietti&#39;, id: 1 }</span></span>
+<span class="line"><span style="color: #24292EFF">  },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedIdParamsValues: { users: 1, addresses: &#39;5&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedListFilter: {},</span></span>
+<span class="line"><span style="color: #24292EFF">  totalLoads: 1</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span></code></pre>
+</code></pre>
+<p>The page will display properties of the <code>userIdRecord</code> object, as well as the <code>addressIdRecord</code> object. This means that if you decide to change the architecture of the application (changing the page’s location, or even not returning the user record in the address), the user record will be in the same place (<code>userIdRecord</code>) and no refactoring will be needed in the elements themselves.</p>
+<h3 id="load-data-with-the-page-only-having-tagid-no-userid-whereas-the-store-url-includes-userid-and-addressid-userid-is-fished-out-of-the-fetched-addressidrecord-record-and-is-used-for-the-second-fetch-call-to-populate-useridrecord">Load data with the page only having tagId (no userId), whereas the store URL includes <code>userId</code> and <code>addressId</code>; userId is fished out of the (fetched) <code>addressIdRecord</code> record, and is used for the second <code>fetch()</code> call to populate <code>userIdRecord</code></h3>
+
+            
+          
+            
+            <pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-tags/5&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-tags/:tagId&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #22863A">&#39;/users/:userId/tags/:tagId&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">      params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #1976D2">false</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      { }</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">    )</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The result is:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">URL RESOLUTION:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{ tagId: &#39;5&#39;, </span><span style="color: #6F42C1; font-weight: bold">__PATH__</span><span style="color: #24292EFF">: &#39;/view-tags/:tagId&#39; }</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:43961/stores/1.0.0/tags/5</span></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:43961/stores/1.0.0/users/1</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">LOADER RESULT:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  loadedElementData: {</span></span>
+<span class="line"><span style="color: #24292EFF">    tagIdRecord: { id: 5, userId: 1, name: &#39;Chiara Tag 1&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">    userIdRecord: { name: &#39;Chiara&#39;, surname: &#39;Fabbietti&#39;, id: 1 }</span></span>
+<span class="line"><span style="color: #24292EFF">  },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedIdParamsValues: { users: 1, tags: &#39;5&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedListFilter: {},</span></span>
+<span class="line"><span style="color: #24292EFF">  totalLoads: 2</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span></code></pre>
+</code></pre>
+<h3 id="load-a-filtered-list-enabling-filters">Load a (filtered) list, enabling filters</h3>
+
+            
+          
+            
+            <p>The loader allows to specify, in its third parameter, if the data URL ends with a store name which will be loaded as a list. In this case, the page URL is <code>/view-users/:userId/all-tags</code>; the only part that really matters is <code>userId</code>; however, the data URL is  <code>/users/:userId/tags</code>. Since the third parameter is set to <code>true</code>, that <code>tags</code> at the end of the data URL is expected to be a store:</p>
+<pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-users/1/all-tags&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-users/:userId/all-tags&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #22863A">&#39;/users/:userId/tags&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">      params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #1976D2">true</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      { userIdRecord</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> chiara }</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">    )</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The result is:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">URL RESOLUTION:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{ userId: &#39;1&#39;, </span><span style="color: #6F42C1; font-weight: bold">__PATH__</span><span style="color: #24292EFF">: &#39;/view-users/:userId/all-tags&#39; }</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:33245/stores/1.0.0/users/1</span></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:33245/stores/1.0.0/tags?userId=1</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">LOADER RESULT:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  loadedElementData: {</span></span>
+<span class="line"><span style="color: #24292EFF">    userIdRecord: { name: &#39;Chiara&#39;, surname: &#39;Fabbietti&#39;, id: 1 },</span></span>
+<span class="line"><span style="color: #24292EFF">    tagsList: [ </span><span style="color: #D32F2F">[Object]</span><span style="color: #24292EFF">, </span><span style="color: #D32F2F">[Object]</span><span style="color: #24292EFF">, </span><span style="color: #D32F2F">[Object]</span><span style="color: #24292EFF">, </span><span style="color: #D32F2F">[Object]</span><span style="color: #24292EFF"> ]</span></span>
+<span class="line"><span style="color: #24292EFF">  },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedIdParamsValues: { users: &#39;1&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedListFilter: { userId: &#39;1&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  totalLoads: 1</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span></code></pre>
+</code></pre>
+<p>The list store is always the last one to be loaded. This is because the list store’s query to the server is different: it doesn’t include a specific ID, but id <em>does</em> includes filtering in the query string; the filtering will include <em>all</em> IDs present in the data URL. In this case, the data URL only had <code>userId</code> – which is why the query for the list will be <code>/stores/1.0.0/tags?userId=1</code>. This ensures that only the tags belnging to that particular user will make their way into the resulting dataset. </p>
+<p>Note that the loadedElementData’s property for the list is called <code>tagsList</code> (no <code>Record</code> suffix). There will only ever be one property with the <code>List</code> suffix, and it will only ever be there is the third parameter for the loader is set to <code>true</code>. If it <em>is</em> set to true, then the last part of the data URL <em>must</em> be a store name, which will be queried with the appropriate query string for filtering.</p>
+<h3 id="load-a-filtered-list-enabling-filters-skipping-one-fetch">Load a (filtered) list, enabling filters, skipping one fetch</h3>
+
+            
+          
+            
+            <p>The same principles seen before in terms of pre-loading will apply here. This code for example already has <code>userIdRecord</code> in the element data parameter. So, the user will not be fetched:</p>
+<pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-users/1/all-tags&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-users/:userId/all-tags&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #22863A">&#39;/users/:userId/tags&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">      params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #1976D2">true</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      { userIdRecord</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> chiara }</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">    )</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The end result will only make one network call:</p>
+<pre><code><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">URL RESOLUTION:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{ userId: &#39;1&#39;, </span><span style="color: #6F42C1; font-weight: bold">__PATH__</span><span style="color: #24292EFF">: &#39;/view-users/:userId/all-tags&#39; }</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">FETCHING: http://127.0.0.1:42473/stores/1.0.0/tags?userId=1</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">LOADER RESULT:</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">{</span></span>
+<span class="line"><span style="color: #24292EFF">  loadedElementData: { tagsList: [ </span><span style="color: #D32F2F">[Object]</span><span style="color: #24292EFF">, </span><span style="color: #D32F2F">[Object]</span><span style="color: #24292EFF">, </span><span style="color: #D32F2F">[Object]</span><span style="color: #24292EFF">, </span><span style="color: #D32F2F">[Object]</span><span style="color: #24292EFF"> ] },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedIdParamsValues: { users: &#39;1&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  resolvedListFilter: { userId: &#39;1&#39; },</span></span>
+<span class="line"><span style="color: #24292EFF">  totalLoads: 0</span></span>
+<span class="line"><span style="color: #24292EFF">}</span></span></code></pre>
+</code></pre>
+<p>Note that only one fetch() call is done.</p>
+<h3 id="not-enough-information">Not enough information</h3>
+
+            
+          
+            
+            <p>Sometimes, the loader will fail for lack of information. The loader goes to great length scanning the data in <code>elementData</code> and the data loaded: it will look for anything that looks like an ID, based on the parameters names. This was shown extensively in the examples above. However, sometimes there just isn’t enough information.</p>
+<p>For exampe this won’t work:</p>
+<pre><code class="language-javascript"><pre class="shiki" style="background-color: transparent"><code ><span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">global</span><span style="color: #24292EFF">.window </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> { location</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> { pathname</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;/view-users/1&#39;</span><span style="color: #24292EFF"> } }</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> params </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">locationMatch</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;/view-users/:userId&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;URL RESOLUTION:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(params)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">r</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">loader</span><span style="color: #24292EFF">(</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #22863A">&#39;/users/:userId/tags/:tagId&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span></span>
+<span class="line"><span style="color: #24292EFF">      params</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      </span><span style="color: #1976D2">false</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      { userIdRecord</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> chiara }</span><span style="color: #212121">,</span></span>
+<span class="line"><span style="color: #24292EFF">      defaultConfig</span></span>
+<span class="line"><span style="color: #24292EFF">    )</span></span>
+<span class="line empty-line"></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;LOADER RESULT:&#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line"><span style="color: #24292EFF">    </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(r)</span></span></code></pre>
+</code></pre>
+<p>The problem here is that the page URL only provides <code>:userId</code>, whereas the loader also needs <code>tagId</code> which is nowhere to be seen.</p>
+<h2 id="closing-notes">Closing notes</h2>
+
+            
+          
+            
+            <p>The main benefit of using this data loader is that you can code your element knowing that specific data will be there. This data can come from a direct network load, from a property of a record after a network load, from an outer element, or from a property of a record passed by the outer element.</p>
+<p>The point is that where the data comes from <em>shouldn’t matter</em>. You should be able to refactor your application to minimise network traffic, and <em>not</em> change existing elements. You should be able to improve the server code, providing full objects for parent records, and know that the app will “magically” make fewer network calls.</p>
+<p>This is precisely the goal of this data loader.</p>
+<h2 id="license">License</h2>
+
+            
+          
+            
+            <p>GPL</p>
+
+            
+          
+        </div>
+
+
+        <div class="footer">Footer</div>
+        </div>
+    </body>
+</html>

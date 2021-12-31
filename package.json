@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/mercmobily/data-loader#readme",
   "devDependencies": {
-    "mocha": "^9.1.3"
+    "mocha": "^9.1.3",
+    "docco-next": "^0.9.10"
   },
   "dependencies": {
     "chai": "^4.3.4",
