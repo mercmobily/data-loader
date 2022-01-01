@@ -29,6 +29,10 @@
     text-align: center;
 }
 
+.sidebar li {
+    list-style-type: none;
+}
+
 /* medium screen */
 @media all and (min-width: 600px) {
     /* if screen > 600px sidebar appears alongside content getting 1/3rd of space */

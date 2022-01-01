@@ -9,6 +9,9 @@
     </head>
 <%
     function prettySource(s) {
+      if (s === 'index.md') return 'Home'
+      if (s === 'code.js') return 'Literate code'
+
       if (s.endsWith('.md')) s = s.replace(/\.md$/g, '').replace(/\-/g, ' ')
     
       if (s.match('/')) {
@@ -26,7 +29,6 @@
         <div class="sidebar">
           <% if (sources.length > 1) { %>
             <div class="toc">
-              <h3>Table of Contents</h3>
               <ol>
                 <% for (var i=0, l = sources.length; i < l; i++) { %>
                   <% var source = sources[i]; %>

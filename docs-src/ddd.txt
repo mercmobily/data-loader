@@ -1,8 +1,0 @@
-total 76
--rw-rw-r-- 1 merc merc 38811 Dec 31 08:41 code.js
--rw-rw-r-- 1 merc merc     0 Jan  1 07:31 ddd.txt
--rw-rw-r-- 1 merc merc   837 Dec 26 22:32 docco.css
--rw-rw-r-- 1 merc merc  1531 Jan  1 07:31 docco.ejs
-drwxrwxr-x 2 merc merc  4096 Dec 31 23:44 images
--rw-rw-r-- 1 merc merc 19657 Jan  1 07:23 index.md
--rwxrwxr-x 1 merc merc   245 Jan  1 07:16 makeDocs.sh
