@@ -1,13 +1,16 @@
-rm -rf ../docs/*;
-tail -n +5 ../README.md > index.md
-# node --inspect-brk ../node_modules/docco-next/bin/docco \
-
+. ../node_modules/web-sites-common/makeDocsBase.sh
 
 ../node_modules/docco-next/bin/docco \
-  -c docco.css\
-  -t docco.ejs\
+  -p ../node_modules/web-sites-common/plugin.js\
+  -c ../node_modules/web-sites-common/template.css\
+  -t ../node_modules/web-sites-common/template.ejs\
   -o ../docs\
- index.md\
- code.js
+  index.md\
+  documentation.md\
+  codelabs.md\
+  codelabs/how-to/index.md\
+  code.md\
+  code/mixins/*js\
+  code/elements/*js
 
 cp -r ./images ../docs/
