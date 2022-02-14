@@ -3,11 +3,12 @@
 
 <html lang="en">
 <head>
-  <title>index.md</title>
+  <title>Welcome</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <link rel="stylesheet" media="all" href="/public/stylesheets/normalize.css" />
   <link rel="stylesheet" media="all" href="template.css" />
+  <link rel="stylesheet" media="all" href="normalize.css" />
+  <link rel="stylesheet" media="all" href="extra.css" />
 
   <script type="module" src="/lib/material-esm.js"></script>
   <script type="module" src="/lib/tpe-esm.js"></script>
@@ -20,7 +21,7 @@
   <ee-header id="header" class="header" >
     <div slot="header-title" style="display: flex;">
       <div id="logo" alt="TPE"></div>
-      <h3 class="page-title" >index.md</h3>
+      <h3 class="page-title" >Welcome</h3>
     </div>
     
       <nav class="header-menu" slot="actions" role="navigation">
@@ -59,13 +60,10 @@
             
             
               <li>
-                  <a class="source " href="code.html">
-                      code
+                  <a class="source " href="literate-code.html">
+                      literate code
                   </a>
               </li>
-            
-          
-            
             
           
         </ul>
@@ -82,19 +80,68 @@
   </ee-header>
   <main role="main">
     
+    
+
+      <nav class="toc" role="navigation">
+        <ul>
+          
+            
+            
+              <li>
+                <a class="source  current " href="index.html">
+                    home
+                </a>
+              </li>
+          
+            
+            
+              <li>
+                <a class="source " href="documentation.html">
+                    documentation
+                </a>
+              </li>
+          
+            
+            
+              <li>
+                <a class="source " href="codelabs.html">
+                    codelabs
+                </a>
+              </li>
+          
+            
+            
+              <li>
+                <a class="source  indented " href="codelabs/how-to/index.html">
+                    codelabs &#8627; how to
+                </a>
+              </li>
+          
+            
+            
+              <li>
+                <a class="source " href="literate-code.html">
+                    literate code
+                </a>
+              </li>
+          
+        </ul>
+      </nav>
+    
 
     <section class="content-page">
 
-      <style>
+      
+<style>
 
-  ee-header {
+  NOPE ee-header {
     -webkit-animation: fadeIn 0.6s ease-in; /* Safari 4+ */
     -moz-animation:    fadeIn 0.6s ease-in; /* Fx 5+ */
     -o-animation:      fadeIn 0.6s ease-in; /* Opera 12+ */
     animation:         fadeIn 0.6s ease-in; /* IE 10+, Fx 29+ */
   }
 
-  #logo {
+  NOPE #logo {
     box-sizing: border-box;
     height: 100px;
     background-image: url("images/TPE_logo_white.png");
@@ -103,10 +150,12 @@
     background-position: center;
   }
 
+  /*
   .header div.topbar #logo ,
   ee-header #logo {
     display: none;
   }
+  */
 
   .home-hero {
     box-sizing: border-box;
@@ -230,10 +279,6 @@
         <article class="index.md">
       
                   
-          <h1 id=""></h1>
-
-          
-                  
           
           
         
@@ -282,13 +327,10 @@
           
           
             <li>
-                <a class="source " href="code.html">
-                    code
+                <a class="source " href="literate-code.html">
+                    literate code
                 </a>
             </li>
-          
-        
-          
           
         
       </ul>
