@@ -30,7 +30,7 @@
     "chai": "^4.3.4",
     "cross-fetch": "^3.1.4",
     "express": "^4.17.1",
-    "jsonreststores": "^2.0.12",
+    "jsonreststores": "^2.0.14",
     "simpleschema": "^2.0.6"
   }
 }
