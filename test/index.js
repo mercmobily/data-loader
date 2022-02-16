@@ -33,6 +33,7 @@ function startServer () {
     var server = http.createServer(app)
 
     server.listen({ port: 0 }, () => {
+      debugger
       JsonRestStores.requireStoresFromPath('test/stores', app)
       resolve(server)
     })
