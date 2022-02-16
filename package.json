@@ -1,7 +1,7 @@
 {
   "name": "spa-data-loader",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A data loader for SPA (Single Page Applications)",
   "main": "index.js",
   "scripts": {
