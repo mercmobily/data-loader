@@ -1,8 +1,6 @@
-# data-loader
-
 [![npm version][npm-image]][npm-url]
 [![install size][install-size-image]][install-size-url]
-
+# data-loader
 
 ## A data loader for SPA (Single Page Applications)
 
