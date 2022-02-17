@@ -610,30 +610,31 @@ nakedStoreUrl</p>
 
           
             <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 463;"><span class="line" id="L463"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #1976D2">config</span><span style="color: #24292EFF">.verbose) </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;FETCHING:&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> url)</span></span>
-<span class="line" id="L464"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> response </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">fetch</span><span style="color: #24292EFF">(url)</span></span>
-<span class="line" id="L465"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> record </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">response</span><span style="color: #6F42C1">.json</span><span style="color: #24292EFF">()</span></span>
-<span class="line empty-line" id="L466"></span>
-<span class="line" id="L467"><span style="color: #24292EFF">          loadedElementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> record</span></span>
-<span class="line empty-line" id="L468"></span>
-<span class="line" id="L469"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">!</span><span style="color: #24292EFF">alreadylookedInto[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">]) {</span></span>
-<span class="line" id="L470"><span style="color: #24292EFF">            </span><span style="color: #6F42C1">lookIntoRecord</span><span style="color: #24292EFF">(record</span><span style="color: #212121">,</span><span style="color: #24292EFF"> elementData</span><span style="color: #212121">,</span><span style="color: #24292EFF"> loadedElementData</span><span style="color: #212121">,</span><span style="color: #24292EFF"> resolvedIdParamsValues</span><span style="color: #212121">,</span><span style="color: #24292EFF">  resolvedListFilter</span><span style="color: #212121">,</span><span style="color: #24292EFF"> store2IdParams</span><span style="color: #212121">,</span><span style="color: #24292EFF"> isList</span><span style="color: #212121">,</span><span style="color: #24292EFF"> store)</span></span>
-<span class="line" id="L471"><span style="color: #24292EFF">            alreadylookedInto[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">true</span></span>
-<span class="line" id="L472"><span style="color: #24292EFF">          }</span></span>
-<span class="line" id="L473"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">return</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">true</span></span>
-<span class="line" id="L474"><span style="color: #24292EFF">        })()</span></span>
-<span class="line" id="L475"><span style="color: #24292EFF">      )</span></span>
-<span class="line empty-line" id="L476"></span>
-<span class="line empty-line" id="L477"></span></code></pre>
+<span class="line" id="L464"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">debugger</span></span>
+<span class="line" id="L465"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> response </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">fetch</span><span style="color: #24292EFF">(url)</span></span>
+<span class="line" id="L466"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> record </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">response</span><span style="color: #6F42C1">.json</span><span style="color: #24292EFF">()</span></span>
+<span class="line empty-line" id="L467"></span>
+<span class="line" id="L468"><span style="color: #24292EFF">          loadedElementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> record</span></span>
+<span class="line empty-line" id="L469"></span>
+<span class="line" id="L470"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">!</span><span style="color: #24292EFF">alreadylookedInto[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">]) {</span></span>
+<span class="line" id="L471"><span style="color: #24292EFF">            </span><span style="color: #6F42C1">lookIntoRecord</span><span style="color: #24292EFF">(record</span><span style="color: #212121">,</span><span style="color: #24292EFF"> elementData</span><span style="color: #212121">,</span><span style="color: #24292EFF"> loadedElementData</span><span style="color: #212121">,</span><span style="color: #24292EFF"> resolvedIdParamsValues</span><span style="color: #212121">,</span><span style="color: #24292EFF">  resolvedListFilter</span><span style="color: #212121">,</span><span style="color: #24292EFF"> store2IdParams</span><span style="color: #212121">,</span><span style="color: #24292EFF"> isList</span><span style="color: #212121">,</span><span style="color: #24292EFF"> store)</span></span>
+<span class="line" id="L472"><span style="color: #24292EFF">            alreadylookedInto[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">true</span></span>
+<span class="line" id="L473"><span style="color: #24292EFF">          }</span></span>
+<span class="line" id="L474"><span style="color: #24292EFF">          </span><span style="color: #D32F2F">return</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">true</span></span>
+<span class="line" id="L475"><span style="color: #24292EFF">        })()</span></span>
+<span class="line" id="L476"><span style="color: #24292EFF">      )</span></span>
+<span class="line empty-line" id="L477"></span>
+<span class="line empty-line" id="L478"></span></code></pre>
           
                   
           <p>Only allow pushing of more items here if aggressiveLoading is set.
 If not, stop after adding one entry</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 479;"><span class="line" id="L479"><span style="color: #24292EFF">        </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">!</span><span style="color: #24292EFF">aggressiveLoading) </span><span style="color: #D32F2F">break</span><span style="color: #24292EFF">     </span></span>
-<span class="line" id="L480"><span style="color: #24292EFF">    }</span></span>
-<span class="line empty-line" id="L481"></span>
-<span class="line empty-line" id="L482"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 480;"><span class="line" id="L480"><span style="color: #24292EFF">        </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">!</span><span style="color: #24292EFF">aggressiveLoading) </span><span style="color: #D32F2F">break</span><span style="color: #24292EFF">     </span></span>
+<span class="line" id="L481"><span style="color: #24292EFF">    }</span></span>
+<span class="line empty-line" id="L482"></span>
+<span class="line empty-line" id="L483"></span></code></pre>
           
                   
           <p>The <code>for</code> cycle has finished. The whole <code>for</code> cycle might well be repeated again; however, for now, this is
@@ -644,38 +645,38 @@ missing.
 If <code>nullAndUnloadedPresent</code> is false, then it means loading is properly finished,</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 490;"><span class="line" id="L490"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">!</span><span style="color: #1976D2">toLoad</span><span style="color: #24292EFF">.</span><span style="color: #1976D2">length</span><span style="color: #24292EFF">) {</span></span>
-<span class="line" id="L491"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (nullAndUnloadedPresent) {</span></span>
-<span class="line" id="L492"><span style="color: #24292EFF">        </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.error</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;Data on loading:&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> {</span></span>
-<span class="line" id="L493"><span style="color: #24292EFF">          dataUrlInfo</span><span style="color: #212121">,</span></span>
-<span class="line" id="L494"><span style="color: #24292EFF">          loadedElementData</span><span style="color: #212121">,</span></span>
-<span class="line" id="L495"><span style="color: #24292EFF">          resolvedIdParamsValues</span><span style="color: #212121">,</span></span>
-<span class="line" id="L496"><span style="color: #24292EFF">          resolvedListFilter</span></span>
-<span class="line" id="L497"><span style="color: #24292EFF">        })</span></span>
-<span class="line" id="L498"><span style="color: #24292EFF">        </span><span style="color: #D32F2F">throw</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">new</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">Error</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;Not enough information to resolve the URL: &#39;</span><span style="color: #24292EFF">)</span></span>
-<span class="line" id="L499"><span style="color: #24292EFF">      }</span></span>
-<span class="line" id="L500"><span style="color: #24292EFF">      </span><span style="color: #C2C3C5">/* Break the `while` cycle: loading of records is finished */</span><span style="color: #24292EFF"> </span></span>
-<span class="line" id="L501"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">break</span></span>
-<span class="line empty-line" id="L502"></span>
-<span class="line empty-line" id="L503"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 491;"><span class="line" id="L491"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">!</span><span style="color: #1976D2">toLoad</span><span style="color: #24292EFF">.</span><span style="color: #1976D2">length</span><span style="color: #24292EFF">) {</span></span>
+<span class="line" id="L492"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (nullAndUnloadedPresent) {</span></span>
+<span class="line" id="L493"><span style="color: #24292EFF">        </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.error</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;Data on loading:&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> {</span></span>
+<span class="line" id="L494"><span style="color: #24292EFF">          dataUrlInfo</span><span style="color: #212121">,</span></span>
+<span class="line" id="L495"><span style="color: #24292EFF">          loadedElementData</span><span style="color: #212121">,</span></span>
+<span class="line" id="L496"><span style="color: #24292EFF">          resolvedIdParamsValues</span><span style="color: #212121">,</span></span>
+<span class="line" id="L497"><span style="color: #24292EFF">          resolvedListFilter</span></span>
+<span class="line" id="L498"><span style="color: #24292EFF">        })</span></span>
+<span class="line" id="L499"><span style="color: #24292EFF">        </span><span style="color: #D32F2F">throw</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">new</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">Error</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;Not enough information to resolve the URL: &#39;</span><span style="color: #24292EFF">)</span></span>
+<span class="line" id="L500"><span style="color: #24292EFF">      }</span></span>
+<span class="line" id="L501"><span style="color: #24292EFF">      </span><span style="color: #C2C3C5">/* Break the `while` cycle: loading of records is finished */</span><span style="color: #24292EFF"> </span></span>
+<span class="line" id="L502"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">break</span></span>
+<span class="line empty-line" id="L503"></span>
+<span class="line empty-line" id="L504"></span></code></pre>
           
                   
           <p>If there is something to load, then yes, load it. This is done by <code>await</code>ing the promises in <code>toLoad</code>.</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 504;"><span class="line" id="L504"><span style="color: #24292EFF">    } </span><span style="color: #D32F2F">else</span><span style="color: #24292EFF"> {</span></span>
-<span class="line empty-line" id="L505"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 505;"><span class="line" id="L505"><span style="color: #24292EFF">    } </span><span style="color: #D32F2F">else</span><span style="color: #24292EFF"> {</span></span>
+<span class="line empty-line" id="L506"></span></code></pre>
           
                   
           <p>Load all pending store stuff</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 506;"><span class="line" id="L506"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> p</span></span>
-<span class="line" id="L507"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #1976D2">toLoad</span><span style="color: #24292EFF">.</span><span style="color: #1976D2">length</span><span style="color: #24292EFF">) p </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">Promise</span><span style="color: #6F42C1">.all</span><span style="color: #24292EFF">(toLoad)</span></span>
-<span class="line" id="L508"><span style="color: #24292EFF">      totalLoads </span><span style="color: #D32F2F">+=</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">toLoad</span><span style="color: #24292EFF">.</span><span style="color: #1976D2">length</span></span>
-<span class="line" id="L509"><span style="color: #24292EFF">    }</span></span>
-<span class="line empty-line" id="L510"></span>
-<span class="line empty-line" id="L511"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 507;"><span class="line" id="L507"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> p</span></span>
+<span class="line" id="L508"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #1976D2">toLoad</span><span style="color: #24292EFF">.</span><span style="color: #1976D2">length</span><span style="color: #24292EFF">) p </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">Promise</span><span style="color: #6F42C1">.all</span><span style="color: #24292EFF">(toLoad)</span></span>
+<span class="line" id="L509"><span style="color: #24292EFF">      totalLoads </span><span style="color: #D32F2F">+=</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">toLoad</span><span style="color: #24292EFF">.</span><span style="color: #1976D2">length</span></span>
+<span class="line" id="L510"><span style="color: #24292EFF">    }</span></span>
+<span class="line empty-line" id="L511"></span>
+<span class="line empty-line" id="L512"></span></code></pre>
           
                   
           <p>This point demarks the end of the while cycle. If the code reaches this point,
@@ -688,10 +689,10 @@ information is loaded (assuming that addresse have a property called <code>userI
 <p>The <code>for</code> cycle will restart, possibly adding promises to <code>toLoad</code>, and so on. </p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 521;"><span class="line" id="L521"><span style="color: #24292EFF">  }</span></span>
-<span class="line empty-line" id="L522"></span>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 522;"><span class="line" id="L522"><span style="color: #24292EFF">  }</span></span>
 <span class="line empty-line" id="L523"></span>
-<span class="line empty-line" id="L524"></span></code></pre>
+<span class="line empty-line" id="L524"></span>
+<span class="line empty-line" id="L525"></span></code></pre>
           
                   
           <p>There is a small, but ugly, possibility that even though all records were there, some Ids are
@@ -699,13 +700,13 @@ still missing. This must not happen, as the viewing element will be unable to re
 if needed. Do a check on that</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 527;"><span class="line" id="L527"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">idParamsMissing</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">Object</span><span style="color: #6F42C1">.keys</span><span style="color: #24292EFF">(resolvedIdParamsValues)</span><span style="color: #6F42C1">.filter</span><span style="color: #24292EFF">(store </span><span style="color: #D32F2F">=&gt;</span><span style="color: #24292EFF"> resolvedIdParamsValues[store] </span><span style="color: #D32F2F">===</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #24292EFF">)</span></span>
-<span class="line" id="L528"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #1976D2">idParamsMissing</span><span style="color: #24292EFF">.</span><span style="color: #1976D2">length</span><span style="color: #24292EFF">) {</span></span>
-<span class="line" id="L529"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">throw</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">new</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">Error</span><span style="color: #24292EFF">(</span><span style="color: #22863A">`Loading successful, but IDs missing for stores: </span><span style="color: #D32F2F">${</span><span style="color: #1976D2">idParamsMissing</span><span style="color: #6F42C1">.join</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;, &#39;</span><span style="color: #24292EFF">)</span><span style="color: #D32F2F">}</span><span style="color: #22863A">`</span><span style="color: #24292EFF">)</span></span>
-<span class="line" id="L530"><span style="color: #24292EFF">  }</span></span>
-<span class="line" id="L531"><span style="color: #24292EFF">  </span></span>
-<span class="line empty-line" id="L532"></span>
-<span class="line empty-line" id="L533"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 528;"><span class="line" id="L528"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">idParamsMissing</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">Object</span><span style="color: #6F42C1">.keys</span><span style="color: #24292EFF">(resolvedIdParamsValues)</span><span style="color: #6F42C1">.filter</span><span style="color: #24292EFF">(store </span><span style="color: #D32F2F">=&gt;</span><span style="color: #24292EFF"> resolvedIdParamsValues[store] </span><span style="color: #D32F2F">===</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #24292EFF">)</span></span>
+<span class="line" id="L529"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #1976D2">idParamsMissing</span><span style="color: #24292EFF">.</span><span style="color: #1976D2">length</span><span style="color: #24292EFF">) {</span></span>
+<span class="line" id="L530"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">throw</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">new</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">Error</span><span style="color: #24292EFF">(</span><span style="color: #22863A">`Loading successful, but IDs missing for stores: </span><span style="color: #D32F2F">${</span><span style="color: #1976D2">idParamsMissing</span><span style="color: #6F42C1">.join</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;, &#39;</span><span style="color: #24292EFF">)</span><span style="color: #D32F2F">}</span><span style="color: #22863A">`</span><span style="color: #24292EFF">)</span></span>
+<span class="line" id="L531"><span style="color: #24292EFF">  }</span></span>
+<span class="line" id="L532"><span style="color: #24292EFF">  </span></span>
+<span class="line empty-line" id="L533"></span>
+<span class="line empty-line" id="L534"></span></code></pre>
           
                   
           <p>Now that the loading is done, there is potentially one more thing to do: addresses.
@@ -717,37 +718,37 @@ after <code>deliveries</code>.</p>
 <p>The same URL manipulation function is called, with <code>null</code> as <code>idParam</code> </p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 543;"><span class="line" id="L543"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (isList) {</span></span>
-<span class="line" id="L544"><span style="color: #24292EFF">    </span></span>
-<span class="line" id="L545"><span style="color: #24292EFF">    </span><span style="color: #C2C3C5">/* Manipulate the fetch URL as needed. Note that the prefix is part of the nakedStoreUrl */</span></span>
-<span class="line" id="L546"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> searchParams </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">new</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">URLSearchParams</span><span style="color: #24292EFF">(resolvedListFilter)</span><span style="color: #6F42C1">.toString</span><span style="color: #24292EFF">()</span></span>
-<span class="line" id="L547"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> nakedStoreUrl </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">storeUrlPrefix</span><span style="color: #D32F2F">}</span><span style="color: #22863A">/</span><span style="color: #D32F2F">${</span><span style="color: #1976D2">dataUrlInfo</span><span style="color: #24292EFF">.listStore</span><span style="color: #D32F2F">}</span><span style="color: #22863A">`</span></span>
-<span class="line" id="L548"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> searchParamsAsString </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> searchParams </span><span style="color: #D32F2F">?</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;?&#39;</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">+</span><span style="color: #24292EFF"> searchParams </span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> searchParams </span></span>
-<span class="line" id="L549"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> url </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">nakedStoreUrl</span><span style="color: #D32F2F">}${</span><span style="color: #24292EFF">searchParamsAsString</span><span style="color: #D32F2F">}</span><span style="color: #22863A">`</span></span>
-<span class="line" id="L550"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> fetchUrlModifier </span><span style="color: #D32F2F">===</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;function&#39;</span><span style="color: #24292EFF">) url </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">fetchUrlModifier</span><span style="color: #24292EFF">(url</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">dataUrlInfo</span><span style="color: #24292EFF">.listStore</span><span style="color: #212121">,</span><span style="color: #24292EFF"> nakedStoreUrl</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #212121">,</span><span style="color: #24292EFF"> searchParams</span><span style="color: #212121">,</span><span style="color: #24292EFF"> dataUrlInfo)</span></span>
-<span class="line empty-line" id="L551"></span>
-<span class="line" id="L552"><span style="color: #24292EFF">    </span><span style="color: #C2C3C5">/* Actually fetch the list */</span></span>
-<span class="line" id="L553"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #1976D2">config</span><span style="color: #24292EFF">.verbose) </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;FETCHING:&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> url)</span></span>
-<span class="line" id="L554"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">response</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">fetch</span><span style="color: #24292EFF">(url)</span></span>
-<span class="line" id="L555"><span style="color: #24292EFF">    loadedElementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #1976D2">dataUrlInfo</span><span style="color: #24292EFF">.listStore</span><span style="color: #D32F2F">}</span><span style="color: #22863A">List`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">response</span><span style="color: #6F42C1">.json</span><span style="color: #24292EFF">() </span></span>
-<span class="line" id="L556"><span style="color: #24292EFF">  }</span></span>
-<span class="line empty-line" id="L557"></span>
-<span class="line empty-line" id="L558"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 544;"><span class="line" id="L544"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (isList) {</span></span>
+<span class="line" id="L545"><span style="color: #24292EFF">    </span></span>
+<span class="line" id="L546"><span style="color: #24292EFF">    </span><span style="color: #C2C3C5">/* Manipulate the fetch URL as needed. Note that the prefix is part of the nakedStoreUrl */</span></span>
+<span class="line" id="L547"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> searchParams </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">new</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">URLSearchParams</span><span style="color: #24292EFF">(resolvedListFilter)</span><span style="color: #6F42C1">.toString</span><span style="color: #24292EFF">()</span></span>
+<span class="line" id="L548"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> nakedStoreUrl </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">storeUrlPrefix</span><span style="color: #D32F2F">}</span><span style="color: #22863A">/</span><span style="color: #D32F2F">${</span><span style="color: #1976D2">dataUrlInfo</span><span style="color: #24292EFF">.listStore</span><span style="color: #D32F2F">}</span><span style="color: #22863A">`</span></span>
+<span class="line" id="L549"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> searchParamsAsString </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> searchParams </span><span style="color: #D32F2F">?</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;?&#39;</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">+</span><span style="color: #24292EFF"> searchParams </span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> searchParams </span></span>
+<span class="line" id="L550"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> url </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">nakedStoreUrl</span><span style="color: #D32F2F">}${</span><span style="color: #24292EFF">searchParamsAsString</span><span style="color: #D32F2F">}</span><span style="color: #22863A">`</span></span>
+<span class="line" id="L551"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> fetchUrlModifier </span><span style="color: #D32F2F">===</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;function&#39;</span><span style="color: #24292EFF">) url </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">fetchUrlModifier</span><span style="color: #24292EFF">(url</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">dataUrlInfo</span><span style="color: #24292EFF">.listStore</span><span style="color: #212121">,</span><span style="color: #24292EFF"> nakedStoreUrl</span><span style="color: #212121">,</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #212121">,</span><span style="color: #24292EFF"> searchParams</span><span style="color: #212121">,</span><span style="color: #24292EFF"> dataUrlInfo)</span></span>
+<span class="line empty-line" id="L552"></span>
+<span class="line" id="L553"><span style="color: #24292EFF">    </span><span style="color: #C2C3C5">/* Actually fetch the list */</span></span>
+<span class="line" id="L554"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #1976D2">config</span><span style="color: #24292EFF">.verbose) </span><span style="color: #1976D2">console</span><span style="color: #6F42C1">.log</span><span style="color: #24292EFF">(</span><span style="color: #22863A">&#39;FETCHING:&#39;</span><span style="color: #212121">,</span><span style="color: #24292EFF"> url)</span></span>
+<span class="line" id="L555"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">response</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">fetch</span><span style="color: #24292EFF">(url)</span></span>
+<span class="line" id="L556"><span style="color: #24292EFF">    loadedElementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #1976D2">dataUrlInfo</span><span style="color: #24292EFF">.listStore</span><span style="color: #D32F2F">}</span><span style="color: #22863A">List`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">await</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">response</span><span style="color: #6F42C1">.json</span><span style="color: #24292EFF">() </span></span>
+<span class="line" id="L557"><span style="color: #24292EFF">  }</span></span>
+<span class="line empty-line" id="L558"></span>
+<span class="line empty-line" id="L559"></span></code></pre>
           
                   
           <p>The end result of ths function, as explained at the very beginning, is making network requests
 and return the objects <code>loadedElementData</code>, <code>resolvedIdParamsValues</code> and <code>resolvedListFilter</code> (for lists).</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 561;"><span class="line" id="L561"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">return</span><span style="color: #24292EFF"> {</span></span>
-<span class="line" id="L562"><span style="color: #24292EFF">    loadedElementData</span><span style="color: #212121">,</span></span>
-<span class="line" id="L563"><span style="color: #24292EFF">    resolvedIdParamsValues</span><span style="color: #212121">,</span></span>
-<span class="line" id="L564"><span style="color: #24292EFF">    resolvedListFilter</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> resolvedListFilter </span><span style="color: #D32F2F">||</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #212121">,</span></span>
-<span class="line" id="L565"><span style="color: #24292EFF">    totalLoads</span></span>
-<span class="line" id="L566"><span style="color: #24292EFF">  }</span></span>
-<span class="line" id="L567"><span style="color: #24292EFF">}</span></span>
-<span class="line empty-line" id="L568"></span>
-<span class="line empty-line" id="L569"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 562;"><span class="line" id="L562"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">return</span><span style="color: #24292EFF"> {</span></span>
+<span class="line" id="L563"><span style="color: #24292EFF">    loadedElementData</span><span style="color: #212121">,</span></span>
+<span class="line" id="L564"><span style="color: #24292EFF">    resolvedIdParamsValues</span><span style="color: #212121">,</span></span>
+<span class="line" id="L565"><span style="color: #24292EFF">    resolvedListFilter</span><span style="color: #D32F2F">:</span><span style="color: #24292EFF"> resolvedListFilter </span><span style="color: #D32F2F">||</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #212121">,</span></span>
+<span class="line" id="L566"><span style="color: #24292EFF">    totalLoads</span></span>
+<span class="line" id="L567"><span style="color: #24292EFF">  }</span></span>
+<span class="line" id="L568"><span style="color: #24292EFF">}</span></span>
+<span class="line empty-line" id="L569"></span>
+<span class="line empty-line" id="L570"></span></code></pre>
           
                   
           <p>Its job is to change loadedElementData, resolvedIdParamsValues, resolvedListFilter depending of the contents of
@@ -764,31 +765,31 @@ other records, it will add those to the list of records to check and will contin
 </ul>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 581;"><span class="line" id="L581"><span style="color: #D32F2F">function</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">lookIntoRecord</span><span style="color: #24292EFF">(record</span><span style="color: #212121">,</span><span style="color: #24292EFF"> elementData</span><span style="color: #212121">,</span><span style="color: #24292EFF"> loadedElementData</span><span style="color: #212121">,</span><span style="color: #24292EFF"> resolvedIdParamsValues</span><span style="color: #212121">,</span><span style="color: #24292EFF"> resolvedListFilter</span><span style="color: #212121">,</span><span style="color: #24292EFF"> store2IdParams</span><span style="color: #212121">,</span><span style="color: #24292EFF"> isList</span><span style="color: #212121">,</span><span style="color: #24292EFF"> store) {</span></span>
-<span class="line empty-line" id="L582"></span>
-<span class="line" id="L583"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> record  </span><span style="color: #D32F2F">!==</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;object&#39;</span><span style="color: #24292EFF"> ) </span><span style="color: #D32F2F">return</span><span style="color: #24292EFF"> </span></span>
-<span class="line empty-line" id="L584"></span>
-<span class="line empty-line" id="L585"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 582;"><span class="line" id="L582"><span style="color: #D32F2F">function</span><span style="color: #24292EFF"> </span><span style="color: #6F42C1">lookIntoRecord</span><span style="color: #24292EFF">(record</span><span style="color: #212121">,</span><span style="color: #24292EFF"> elementData</span><span style="color: #212121">,</span><span style="color: #24292EFF"> loadedElementData</span><span style="color: #212121">,</span><span style="color: #24292EFF"> resolvedIdParamsValues</span><span style="color: #212121">,</span><span style="color: #24292EFF"> resolvedListFilter</span><span style="color: #212121">,</span><span style="color: #24292EFF"> store2IdParams</span><span style="color: #212121">,</span><span style="color: #24292EFF"> isList</span><span style="color: #212121">,</span><span style="color: #24292EFF"> store) {</span></span>
+<span class="line empty-line" id="L583"></span>
+<span class="line" id="L584"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> record  </span><span style="color: #D32F2F">!==</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;object&#39;</span><span style="color: #24292EFF"> ) </span><span style="color: #D32F2F">return</span><span style="color: #24292EFF"> </span></span>
+<span class="line empty-line" id="L585"></span>
+<span class="line empty-line" id="L586"></span></code></pre>
           
                   
           <p>The function works by unshifting elements from the <code>recordToCheck</code> array, which is primed to only contain
 the passed <code>record</code>.</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 587;"><span class="line" id="L587"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">recordsToCheck</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> []</span></span>
-<span class="line" id="L588"><span style="color: #24292EFF">  </span><span style="color: #1976D2">recordsToCheck</span><span style="color: #6F42C1">.push</span><span style="color: #24292EFF">(record)</span></span>
-<span class="line empty-line" id="L589"></span>
-<span class="line empty-line" id="L590"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 588;"><span class="line" id="L588"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">recordsToCheck</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> []</span></span>
+<span class="line" id="L589"><span style="color: #24292EFF">  </span><span style="color: #1976D2">recordsToCheck</span><span style="color: #6F42C1">.push</span><span style="color: #24292EFF">(record)</span></span>
+<span class="line empty-line" id="L590"></span>
+<span class="line empty-line" id="L591"></span></code></pre>
           
                   
           <p>The cycle starts now: in the first iteration, the only element there is shifted out and <code>recordsToCheck</code> becomes
 empty.</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 592;"><span class="line" id="L592"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> r</span></span>
-<span class="line" id="L593"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">while</span><span style="color: #24292EFF"> (r </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">recordsToCheck</span><span style="color: #6F42C1">.shift</span><span style="color: #24292EFF">()) {</span></span>
-<span class="line empty-line" id="L594"></span>
-<span class="line empty-line" id="L595"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 593;"><span class="line" id="L593"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> r</span></span>
+<span class="line" id="L594"><span style="color: #24292EFF">  </span><span style="color: #D32F2F">while</span><span style="color: #24292EFF"> (r </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">recordsToCheck</span><span style="color: #6F42C1">.shift</span><span style="color: #24292EFF">()) {</span></span>
+<span class="line empty-line" id="L595"></span>
+<span class="line empty-line" id="L596"></span></code></pre>
           
                   
           <p>Go through all stores again (that is, all keys of the <code>resolvedIdParamsValues</code> object) and look for information
@@ -804,10 +805,10 @@ doesn’t include them), and since the record includes the matching idParam (<co
 to resolvedIdParamsValues for both <code>users</code> and <code>usersExtra</code>.</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 608;"><span class="line" id="L608"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">for</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> store </span><span style="color: #D32F2F">in</span><span style="color: #24292EFF"> resolvedIdParamsValues) { </span></span>
-<span class="line" id="L609"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">idParam</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> store2IdParams[store]</span></span>
-<span class="line empty-line" id="L610"></span>
-<span class="line empty-line" id="L611"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 609;"><span class="line" id="L609"><span style="color: #24292EFF">    </span><span style="color: #D32F2F">for</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">let</span><span style="color: #24292EFF"> store </span><span style="color: #D32F2F">in</span><span style="color: #24292EFF"> resolvedIdParamsValues) { </span></span>
+<span class="line" id="L610"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">idParam</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> store2IdParams[store]</span></span>
+<span class="line empty-line" id="L611"></span>
+<span class="line empty-line" id="L612"></span></code></pre>
           
                   
           <p>Look for missing store IDs in the loaded record
@@ -815,11 +816,11 @@ If the loaded record has a paramIdValue that was missing (not present in routing
 it will most certainly be a valid idParams (which was missing in the URL in the first place)</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 615;"><span class="line" id="L615"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> r[idParam] </span><span style="color: #D32F2F">!==</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;undefined&#39;</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">&amp;&amp;</span><span style="color: #24292EFF"> resolvedIdParamsValues[store] </span><span style="color: #D32F2F">===</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #24292EFF">) {</span></span>
-<span class="line" id="L616"><span style="color: #24292EFF">        resolvedIdParamsValues[store] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> r[idParam]</span></span>
-<span class="line" id="L617"><span style="color: #24292EFF">      }</span></span>
-<span class="line empty-line" id="L618"></span>
-<span class="line empty-line" id="L619"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 616;"><span class="line" id="L616"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> r[idParam] </span><span style="color: #D32F2F">!==</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;undefined&#39;</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">&amp;&amp;</span><span style="color: #24292EFF"> resolvedIdParamsValues[store] </span><span style="color: #D32F2F">===</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #24292EFF">) {</span></span>
+<span class="line" id="L617"><span style="color: #24292EFF">        resolvedIdParamsValues[store] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> r[idParam]</span></span>
+<span class="line" id="L618"><span style="color: #24292EFF">      }</span></span>
+<span class="line empty-line" id="L619"></span>
+<span class="line empty-line" id="L620"></span></code></pre>
           
                   
           <p>Look for a <code>[...idParam...]Record</code> entry in the loaded record. For example the record for the addresses
@@ -831,31 +832,31 @@ If that is the case, the property’s content (supposed to be a full record obje
 while() cycle go for longer, since the statement <code>r = recordsToCheck.shift()</code> will return another record.</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 628;"><span class="line" id="L628"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">elementDataRecord</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> elementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">||</span><span style="color: #24292EFF"> loadedElementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">]</span></span>
-<span class="line empty-line" id="L629"></span>
-<span class="line" id="L630"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">!</span><span style="color: #24292EFF">elementDataRecord </span><span style="color: #D32F2F">&amp;&amp;</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> r[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">]  </span><span style="color: #D32F2F">!==</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;undefined&#39;</span><span style="color: #24292EFF">) {</span></span>
-<span class="line" id="L631"><span style="color: #24292EFF">        loadedElementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> r[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">]                  </span></span>
-<span class="line" id="L632"><span style="color: #24292EFF">        </span><span style="color: #1976D2">recordsToCheck</span><span style="color: #6F42C1">.push</span><span style="color: #24292EFF">(r[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">])</span></span>
-<span class="line" id="L633"><span style="color: #24292EFF">      }</span></span>
-<span class="line empty-line" id="L634"></span>
-<span class="line empty-line" id="L635"></span></code></pre>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 629;"><span class="line" id="L629"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">const</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">elementDataRecord</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> elementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">||</span><span style="color: #24292EFF"> loadedElementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">]</span></span>
+<span class="line empty-line" id="L630"></span>
+<span class="line" id="L631"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (</span><span style="color: #D32F2F">!</span><span style="color: #24292EFF">elementDataRecord </span><span style="color: #D32F2F">&amp;&amp;</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> r[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">]  </span><span style="color: #D32F2F">!==</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;undefined&#39;</span><span style="color: #24292EFF">) {</span></span>
+<span class="line" id="L632"><span style="color: #24292EFF">        loadedElementData[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> r[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">]                  </span></span>
+<span class="line" id="L633"><span style="color: #24292EFF">        </span><span style="color: #1976D2">recordsToCheck</span><span style="color: #6F42C1">.push</span><span style="color: #24292EFF">(r[</span><span style="color: #22863A">`</span><span style="color: #D32F2F">${</span><span style="color: #24292EFF">idParam</span><span style="color: #D32F2F">}</span><span style="color: #22863A">Record`</span><span style="color: #24292EFF">])</span></span>
+<span class="line" id="L634"><span style="color: #24292EFF">      }</span></span>
+<span class="line empty-line" id="L635"></span>
+<span class="line empty-line" id="L636"></span></code></pre>
           
                   
           <p>For lists, also try and resolve the list filter in case some
 parameters are missing and are present in the loaded record</p>
 
           
-            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 637;"><span class="line" id="L637"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (isList) {</span></span>
-<span class="line" id="L638"><span style="color: #24292EFF">        </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (resolvedListFilter[idParam] </span><span style="color: #D32F2F">===</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">&amp;&amp;</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> r[idParam] </span><span style="color: #D32F2F">!==</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;undefined&#39;</span><span style="color: #24292EFF">) {</span></span>
-<span class="line" id="L639"><span style="color: #24292EFF">          resolvedListFilter[idParam] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> r[idParam]</span></span>
-<span class="line" id="L640"><span style="color: #24292EFF">        }</span></span>
-<span class="line" id="L641"><span style="color: #24292EFF">      }</span></span>
-<span class="line" id="L642"><span style="color: #24292EFF">    }</span></span>
-<span class="line" id="L643"><span style="color: #24292EFF">  }</span></span>
-<span class="line" id="L644"><span style="color: #24292EFF">}</span></span>
-<span class="line empty-line" id="L645"></span>
+            <pre class="shiki" style="background-color: transparent"><code style="--line-start-number: 638;"><span class="line" id="L638"><span style="color: #24292EFF">      </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (isList) {</span></span>
+<span class="line" id="L639"><span style="color: #24292EFF">        </span><span style="color: #D32F2F">if</span><span style="color: #24292EFF"> (resolvedListFilter[idParam] </span><span style="color: #D32F2F">===</span><span style="color: #24292EFF"> </span><span style="color: #1976D2">null</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">&amp;&amp;</span><span style="color: #24292EFF"> </span><span style="color: #D32F2F">typeof</span><span style="color: #24292EFF"> r[idParam] </span><span style="color: #D32F2F">!==</span><span style="color: #24292EFF"> </span><span style="color: #22863A">&#39;undefined&#39;</span><span style="color: #24292EFF">) {</span></span>
+<span class="line" id="L640"><span style="color: #24292EFF">          resolvedListFilter[idParam] </span><span style="color: #D32F2F">=</span><span style="color: #24292EFF"> r[idParam]</span></span>
+<span class="line" id="L641"><span style="color: #24292EFF">        }</span></span>
+<span class="line" id="L642"><span style="color: #24292EFF">      }</span></span>
+<span class="line" id="L643"><span style="color: #24292EFF">    }</span></span>
+<span class="line" id="L644"><span style="color: #24292EFF">  }</span></span>
+<span class="line" id="L645"><span style="color: #24292EFF">}</span></span>
 <span class="line empty-line" id="L646"></span>
-<span class="line empty-line" id="L647"></span></code></pre>
+<span class="line empty-line" id="L647"></span>
+<span class="line empty-line" id="L648"></span></code></pre>
           
         
       

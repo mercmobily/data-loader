@@ -461,6 +461,7 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 
           // Actually fetch the record
           if (config.verbose) console.log('FETCHING:', url)
+          debugger
           let response = await fetch(url)
           let record = await response.json()
 
