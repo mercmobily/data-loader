@@ -58,7 +58,6 @@ This is the configuration object that can be passed to every request. It can hav
   * `fetch`. The function used to fetch. Must have the exact same signature as `window.fetch()`
   * `verbose`. If true, it will print information to the console.
 
-
 ### Defining fetchUrlModifier
 
 If the storeUrlPrefix is defined as `/stores`, and the store is `users`, the default endpoint for it will be:
@@ -84,12 +83,6 @@ to either modify the `url` variable, or recreate it from scratch.
 
 ## A data loader for SPA (Single Page Applications)
 
-Most (all?) SPAs need to load different data depending on the browser's location. Until now, each page had specific code to load the data it needed.
-
-No more. Welcome to data-loader. An opinionated data loader that will allow you to focus on your app, rather than repetitive boilerplate code.
-
-### Introduction
-
 This module allows Single Page Applications to load JSON data using REST automatically, based on the location data.
 The idea is that any SPA should be able to load the data it needs based on the current location URL, and that the
 process of translating the location URL to the actual fetching of data should be automated.
@@ -108,6 +101,12 @@ The end result is that by using this library, your page will automatically load 
 as many REST endpoints as necessary. As long as your naming conventions are sane, you will never have to worry
 about loading data again: each page will know exactly how to load (or not load) its own data.
 
+The API itself is easy enough to understand. However, this module needs two rather complex elements to be tested: a working
+web server with complex data endpoints, and a working routing module. Neither of them are common nor easy to confiugre.
+
+In order to understand how it all works, an example setup environment is provided, with data endpoints and a working routing
+system.
+
 ### Setting up a playground environment
 
 Setting up a playground to test things out has the challenge that you need a number of existing (complex) 
@@ -116,8 +115,14 @@ parts in order to replicate a real-world environment. Specifically:
 * A JSON REST server (with example _data_) that will respond with the right records
 * A routing library that will "resolve" a given location given a template
 
-Luckily, this is all done for you already. Under the directory "tests", you will find a file called `practice.js`
-which includes everything you need.
+Luckily, this is all done for you already. For the data stores, the playground will use the same endpoints used
+for automatic testing. For the routing library, the playground will load the EMS module `routify` to simulate
+real; routing.
+
+Under the directory "tests", you will find a file called `practice.js` which includes everything you need: just add
+code in the `practiceCode()` function, to see what the data loader does.
+
+The next section of the documentation walks through various examples.
 
 #### The JSON REST endpoints (stores)
 
@@ -130,6 +135,8 @@ if a user were loaded directly. The URLs for those data stores are `/users/:user
 
 The stores are prepped with dummy data: 4 users, where the first 2 users have 4 addresse and 4 tags attached. The
 data contained is clear by looking at the `practice.js` file.
+
+To run it, enter the `test` directory and run `node practice.js`.
 
 #### The routing library
 
