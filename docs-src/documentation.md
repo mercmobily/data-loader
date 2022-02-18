@@ -1,12 +1,90 @@
 # data-loader
 
+## Usage
+
+The module exports a single function called `loader` with the following signature:
+
+    export async function loader (dataUrl = '', routingData = {}, isList = false, elementData = {}, config = {})
+
+The loader expects to be used in conjunction with a router that will provide `routingData` depending on the
+browser's current location. 
+
+Here is an explanation of each parameter:
+
+* `dataUrl`
+
+It's a string that represents the list of stores you want to load data from, and the respective IDs for each one
+of those resources. For example `/users/:userId/addresses/:addressId` will mean that data will be loaded from
+the stores `users` and `addresses`. Here `stores` simply means source of data. This string will provide two key
+pieces of information to the data-loader: 1) The data store's name (e.g. `users` or `addresses` 2) The key to find the
+IDs in the routing data (which comes from the application's router interpreting the location bar).
+
+* `routingData`
+
+The routing data comes from the application's router interpreting the location bar. For example if an element
+is set to respond to `/view-users/:userId/view-addresses/:addressId`, and the browser's location is
+`/view-users/10/view-addresses/20`, the routing data should be `{ userId: 10, addressId: 20 }`. It is paramount
+that the name if the keys here (`userId` and `addressId`) match the keys specified in the `dataUrl` parameter. The matching
+names is what glues the data URL and the routing data together.
+
+* `isList`
+
+If `isList` is set to true, the `dataUrl` parameter is expected to end with a store name, rather than a key, like this:
+`/users/:userId/addresses/:addressId/notes`. In this case, `notes` will be assumed to be a store, and its records
+will be loaded accordingly.
+
+* `elementData`
+
+The data loader will try its best to be as lazy as possible. The `elementData` property is an opportunity to provide data
+already loaded to the store. For example, elementData could be `{ userId: { (...user object...) } }` which will allow
+the data loader to skip the loading from the `users` store altogether.
+
+* `config`
+
+This is the configuration object that can be passed to every request. It can have the following properties set:
+
+  * `storeUrlPrefix`. The prefix used to make GET calls to the store. Each store's endpoint is assumed to be
+    the `storeUrlPrefix` property concatenated with the store's name. For example if `storeUrlPrefix` is `/stores`
+    and the store is `users`, the endpoint used to load data will be assumed to be `/stores/users`.
+  * `fetchUrlMofifier`. The assumed endpoint might not be correct. For this reason, a `fetchUrlModifier` function
+    can be provided. The function will change the store's endpoint's URL in whichever way necessary
+    to comply to the server. It receives several parameters, explained below.
+  * `aggressiveLoading`. A flag that will enable aggressive loading (more requests, and less chance to minimise
+    the number of requests)
+  * `fetch`. The function used to fetch. Must have the exact same signature as `window.fetch()`
+  * `verbose`. If true, it will print information to the console.
+
+
+### Defining fetchUrlModifier
+
+If the storeUrlPrefix is defined as `/stores`, and the store is `users`, the default endpoint for it will be:
+
+* For lists,  `${storeUrlPrefix}/${dataUrlInfo.listStore}${searchParams}` (e.g. `/stores/users?param1=XXX&param2=YYY`)
+* For single records, `${storeUrlPrefix}/${store}/${idParamValue}` (e.g. `/stores/users/XXX`)
+
+In some cases, the server's endpoints might be radically different.
+The signature of this function is:
+
+ * `url` -- the URL as worked out the default way, explained above
+ * `store` -- the name of the store.
+ * `prefix` -- the store prefix
+ * `isList` -- a flag to set whether it's a list or not
+ * `searchParams` -- (only if isList is true) The search string, worked out as 
+   `new URLSearchParams(resolvedListFilter).toString()` (with a leading `?` if not empty)
+ * `resolvedListFilter` -- (only if isList is true) The variable used to make up the search string
+ * `idParamValue` -- (only if isList is false) The ID of the item to fetch, worked out as `resolvedIdParamsValues[store]` 
+ * `resolvedIdParamsValues` -- (only if isList is false) The IDs found in the record
+
+A fetchUrlModifier function would generally speaking have a `switch` case checking `store`, and use the passed parameters
+to either modify the `url` variable, or recreate it from scratch.
+
 ## A data loader for SPA (Single Page Applications)
 
 Most (all?) SPAs need to load different data depending on the browser's location. Until now, each page had specific code to load the data it needed.
 
 No more. Welcome to data-loader. An opinionated data loader that will allow you to focus on your app, rather than repetitive boilerplate code.
 
-## Introduction
+### Introduction
 
 This module allows Single Page Applications to load JSON data using REST automatically, based on the location data.
 The idea is that any SPA should be able to load the data it needs based on the current location URL, and that the
@@ -26,7 +104,7 @@ The end result is that by using this library, your page will automatically load 
 as many REST endpoints as necessary. As long as your naming conventions are sane, you will never have to worry
 about loading data again: each page will know exactly how to load (or not load) its own data.
 
-## Setting up a playground environment
+### Setting up a playground environment
 
 Setting up a playground to test things out has the challenge that you need a number of existing (complex) 
 parts in order to replicate a real-world environment. Specifically:
@@ -37,7 +115,7 @@ parts in order to replicate a real-world environment. Specifically:
 Luckily, this is all done for you already. Under the directory "tests", you will find a file called `practice.js`
 which includes everything you need.
 
-### The JSON REST endpoints (stores)
+#### The JSON REST endpoints (stores)
 
 In this playground, the same stores used for running tests are used. They are `Users.js`, `Addresses.js` and
 `Tags.js`. Both `Addresses.js` and `Tags.js` include `userId` in their schema, which means that multiple
@@ -49,7 +127,7 @@ if a user were loaded directly. The URLs for those data stores are `/users/:user
 The stores are prepped with dummy data: 4 users, where the first 2 users have 4 addresse and 4 tags attached. The
 data contained is clear by looking at the `practice.js` file.
 
-### The routing library
+#### The routing library
 
 Routing's main concern in a SPA is to display the correct page. In this case, however, the main concern is to
 extrapolate the right IDs and then load the correct data depending on the URL.
@@ -69,7 +147,7 @@ Since routify is a javascript module, `practice.js` will load it with the call:
 ````
   const locationMatch = (await import('../node_modules/routify/routify.js')).locationMatch
 ````
-## Example use cases
+### Example use cases
 
 The following use cases are created by adding code into the function `practiceCode()` in the `practice.js` file.
 Make sure you have `routify` installed with `npm`, or the file won't work.
@@ -78,7 +156,7 @@ To run the practice file, just type `node practice.js` and see the result.
 
 In the rest of this guide, several use cases will be shown -- really simple ones, to very uncommon and tricky ones.
 
-### Normal load of a user (page /view-users/1 loading data from /stores/users/1)
+#### Normal load of a user (page /view-users/1 loading data from /stores/users/1)
 
 This is a very common and very simple case: the page's URL is `/view-users/1` while the page URL template
 is `/view-users/:userId`.
@@ -156,7 +234,7 @@ The most important part is that `loadedElementData` which includes `userIdRecord
 call. The naming of the property, `userIdRecord`, is the result of the parameter name `userId` followed by
 `Record`.
 
-### Normal load of a user (page /view-users/1 loading data from /stores/users/1), NO loading necessary
+#### Normal load of a user (page /view-users/1 loading data from /stores/users/1), NO loading necessary
 
 In some cases, the data doesn't need to be loaded since it's already available. A typical (and common) example
 is one where the parent element will pass the record to the children elements -- in this case, you don't want
@@ -203,7 +281,7 @@ LOADER RESULT:
 
 There was no loading at all. The loader effectively skipped everything: the data was considered already loaded. This is why `totalLoads` is 0, and `loadedElementData` is an empty object.
 
-### Normal load of a user and one of its tags (page /view-users/1/view-tags/2 loading data from /stores/users/1 and /stores/tags/4)
+#### Normal load of a user and one of its tags (page /view-users/1/view-tags/2 loading data from /stores/users/1 and /stores/tags/4)
 
 The data URL can contain multiple stores. In this case all the IDs in the data URL are the same as the ones in the page URL (`:userId` and `tagId`):
 
@@ -256,7 +334,7 @@ LOADER RESULT:
 
 In this case, there were _two_ network fetches: one for the tag with ID 4, and one for the user with ID 1.
 
-### Load of a user and one of its addresses (page /view-users/1/view-addresses/2 loading data from /stores/users/1 and /stores/addresses/5) SKIPPING one fetch call
+#### Load of a user and one of its addresses (page /view-users/1/view-addresses/2 loading data from /stores/users/1 and /stores/addresses/5) SKIPPING one fetch call
 
 In this case, the loader will load the store `addresses` first by running the `fetch()` call. Since the fetched record _already_ had a property called `userIdRecord`, it will _not_ run another fetched call.
 Note that the network call is skipped _without_ checking that the user ID in the address matches the user ID in the data URL. That is assumed to be the case.
@@ -312,7 +390,7 @@ LOADER RESULT:
 }
 ````
 
-### Load data with the page only having addressId (no userId), whereas the store URL includes `userId` and `addressId`; userId is fished out of the (fetched) `addressIdRecord` record which includes userIdRecord, only 1 call
+#### Load data with the page only having addressId (no userId), whereas the store URL includes `userId` and `addressId`; userId is fished out of the (fetched) `addressIdRecord` record which includes userIdRecord, only 1 call
 
 This example shows that the data URL can have more IDs than the location URL. In this particular example the location URL only has the address ID. This is a typical use case where the page is `/view-addresses/5`, but the page itself also displays the user's name and other details (e.g. "Chiara's main address"). So, the data URL contains `:addressId` but _also_ `:userId`. Since the data loader has effectively no information on how to fetch the user, the user's information MUST come from the address record under the property `userIdRecord`: 
 
@@ -364,7 +442,7 @@ LOADER RESULT:
 
 The page will display properties of the `userIdRecord` object, as well as the `addressIdRecord` object. This means that if you decide to change the architecture of the application (changing the page's location, or even not returning the user record in the address), the user record will be in the same place (`userIdRecord`) and no refactoring will be needed in the elements themselves.
 
-### Load data with the page only having tagId (no userId), whereas the store URL includes `userId` and `addressId`; userId is fished out of the (fetched) `addressIdRecord` record, and is used for the second `fetch()` call to populate `userIdRecord`
+#### Load data with the page only having tagId (no userId), whereas the store URL includes `userId` and `addressId`; userId is fished out of the (fetched) `addressIdRecord` record, and is used for the second `fetch()` call to populate `userIdRecord`
 
 
 ````javascript
@@ -409,7 +487,7 @@ LOADER RESULT:
 }
 ````
 
-### Load a (filtered) list, enabling filters
+#### Load a (filtered) list, enabling filters
 
 The loader allows to specify, in its third parameter, if the data URL ends with a store name which will be loaded as a list. In this case, the page URL is `/view-users/:userId/all-tags`; the only part that really matters is `userId`; however, the data URL is  `/users/:userId/tags`. Since the third parameter is set to `true`, that `tags` at the end of the data URL is expected to be a store:
 
@@ -459,7 +537,7 @@ The list store is always the last one to be loaded. This is because the list sto
 
 Note that the loadedElementData's property for the list is called `tagsList` (no `Record` suffix). There will only ever be one property with the `List` suffix, and it will only ever be there is the third parameter for the loader is set to `true`. If it _is_ set to true, then the last part of the data URL _must_ be a store name, which will be queried with the appropriate query string for filtering.
 
-### Load a (filtered) list, enabling filters, skipping one fetch
+#### Load a (filtered) list, enabling filters, skipping one fetch
 
 The same principles seen before in terms of pre-loading will apply here. This code for example already has `userIdRecord` in the element data parameter. So, the user will not be fetched:
 
@@ -503,7 +581,7 @@ LOADER RESULT:
 
 Note that only one fetch() call is done.
 
-### Not enough information
+#### Not enough information
 
 Sometimes, the loader will fail for lack of information. The loader goes to great length scanning the data in `elementData` and the data loaded: it will look for anything that looks like an ID, based on the parameters names. This was shown extensively in the examples above. However, sometimes there just isn't enough information.
 
@@ -530,7 +608,7 @@ For exampe this won't work:
 
 The problem here is that the page URL only provides `:userId`, whereas the loader also needs `tagId` which is nowhere to be seen.
 
-## Closing notes
+### Closing notes
 
 The main benefit of using this data loader is that you can code your element knowing that specific data will be there. This data can come from a direct network load, from a property of a record after a network load, from an outer element, or from a property of a record passed by the outer element.
 
