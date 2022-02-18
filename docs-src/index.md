@@ -1,7 +1,5 @@
 # Welcome
 
-Visit the [full web site](https://mobily-enterprises.github.io/data-loader) with the full source code as literate code and the comprehendive documentation.
-
 Most (all?) SPAs need to load different data depending on the browser's location. Until now, each page had specific code to load the data it needed.
 
 No more. Welcome to data-loader. An opinionated data loader that will allow you to focus on your app, rather than repetitive boilerplate code.
