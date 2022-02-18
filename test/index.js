@@ -19,7 +19,6 @@ const JsonRestStores = require('jsonreststores')
 const fetch = require('cross-fetch')
 const expect = chai.expect
 
-
 // The next step is to actually have a function that will start the server. This function
 // returns a promise that gets resolved once the server is listening.
 // Since Express works with callbacks, the only way to make it work neatly with an `await`
