@@ -1,5 +1,7 @@
 # data-loader
 
+Visit the [full web site](https://mobily-enterprises.github.io/data-loader) with the full source code as literate code.
+
 ## Usage
 
 The module exports a single function called `loader` with the following signature:
