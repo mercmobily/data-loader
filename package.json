@@ -26,11 +26,11 @@
   "devDependencies": {
     "docco-next": "^0.9.10",
     "mocha": "^9.1.3",
-    "web-sites-common": "^1.0.0",
+    "web-sites-common": "^1.0.2",
     "chai": "^4.3.4",
     "cross-fetch": "^3.1.4",
     "express": "^4.17.1",
-    "jsonreststores": "^2.0.14",
+    "jsonreststores": "^2.0.15",
     "simpleschema": "^2.0.6",
     "eslint": "^8.3.0",
     "eslint-config-standard": "^14.1.1",
@@ -41,5 +41,7 @@
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^4.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "es6-dev-server": "0.0.10"
+  }
 }
