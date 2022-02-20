@@ -32,6 +32,7 @@
     "express": "^4.17.1",
     "jsonreststores": "^2.0.15",
     "simpleschema": "^2.0.6",
+    "es6-dev-server": "0.0.10",
     "eslint": "^8.3.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-html": "^6.2.0",
@@ -39,9 +40,8 @@
     "eslint-plugin-lit": "^1.6.1",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-standard": "^4.1.0"
+    "eslint-plugin-standard": "^4.1.0",
+    "eslint-plugin-literate-comments": "^1.0.3"
   },
-  "dependencies": {
-    "es6-dev-server": "0.0.10"
-  }
+  "dependencies": {}
 }

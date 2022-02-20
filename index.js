@@ -451,16 +451,18 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
           let url = `${storeUrlPrefix}/${store}/${idParamValue}`
 
           /* Work out the URL */
-          if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(
-            url,
-            store,
-            storeUrlPrefix,
-            false,
-            null,
-            null,
-            idParamValue,
-            resolvedIdParamsValues
-          )
+          if (typeof fetchUrlModifier === 'function') {
+            url = fetchUrlModifier(
+              url,
+              store,
+              storeUrlPrefix,
+              false,
+              null,
+              null,
+              idParamValue,
+              resolvedIdParamsValues
+            )
+          }
 
           // Actually fetch the record
           if (config.verbose) console.log('FETCHING:', url)
@@ -469,7 +471,8 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
 
           loadedElementData[`${idParam}Record`] = record
 
-          if (!alreadylookedInto[`${idParam}Record`]) { lookIntoRecord(
+          if (!alreadylookedInto[`${idParam}Record`]) {
+            lookIntoRecord(
               record,
               elementData,
               loadedElementData,
@@ -553,16 +556,18 @@ async function loadData (dataUrlInfo, dataUrl, routingData, isList, elementData,
     searchParams = searchParams ? '?' + searchParams : searchParams
     let url = `${storeUrlPrefix}/${dataUrlInfo.listStore}${searchParams}`
 
-    if (typeof fetchUrlModifier === 'function') url = fetchUrlModifier(
-      url,
-      dataUrlInfo.listStore,
-      storeUrlPrefix,
-      true,
-      searchParams,
-      resolvedListFilter,
-      null,
-      null
-    )
+    if (typeof fetchUrlModifier === 'function') {
+      url = fetchUrlModifier(
+        url,
+        dataUrlInfo.listStore,
+        storeUrlPrefix,
+        true,
+        searchParams,
+        resolvedListFilter,
+        null,
+        null
+      )
+    }
 
     /* Actually fetch the list */
     if (config.verbose) console.log('FETCHING:', url)
@@ -604,8 +609,7 @@ function lookIntoRecord (record, elementData, loadedElementData, resolvedIdParam
 // The cycle starts now: in the first iteration, the only element there is shifted out and `recordsToCheck` becomes
 // empty.
   let r
-  while (r = recordsToCheck.shift()) {
-
+  while (r = recordsToCheck.shift()) { /* eslint-disable-line */
 // Go through all stores again (that is, all keys of the `resolvedIdParamsValues` object) and look for information
 // in the loaded record:
 //
@@ -635,7 +639,7 @@ function lookIntoRecord (record, elementData, loadedElementData, resolvedIdParam
 // `/users/:userId/addresses/:addressId` -- it will be assumed to contain a valid record for the `users` store
 // If that is the case, the property's content (supposed to be a full record object) will be assigned to
 // `loadedElementData` object for that store straight away.
-// 
+//
 // The property's content will _also_ ne added to the list of records to be checked, which will make this very
 // while() cycle go for longer, since the statement `r = recordsToCheck.shift()` will return another record.
 
